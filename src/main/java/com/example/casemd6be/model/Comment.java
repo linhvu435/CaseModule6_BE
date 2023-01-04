@@ -19,8 +19,6 @@ public class Comment {
     @ManyToOne
     private Product product;
 
-    @OneToMany
-    private List<ImgCmt> img;
     @ManyToOne
     private Account account;
 }

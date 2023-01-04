@@ -25,8 +25,7 @@ public class Product {
     @ManyToOne
     private Trademark trademark;
 
-    @OneToMany
-    private List<ImgProduct> img;
+
     @ManyToOne
     private Shop shop;
 }

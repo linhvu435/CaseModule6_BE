@@ -25,6 +25,6 @@ public class Account {
     private String gender;
     private String img;
     private long status;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Roles roles;
 }
