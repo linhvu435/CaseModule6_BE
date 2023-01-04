@@ -13,12 +13,14 @@ public class Comment {
     private long id;
 
     private String cmt;
-    private String img;
-    private int star;
+
+    private long star;
 
     @ManyToOne
     private Product product;
 
+    @OneToMany
+    private List<ImgCmt> img;
     @ManyToOne
     private Account account;
 }

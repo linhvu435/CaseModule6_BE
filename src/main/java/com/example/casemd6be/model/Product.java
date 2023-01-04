@@ -3,6 +3,7 @@ package com.example.casemd6be.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -12,7 +13,8 @@ public class Product {
     private long id;
 
     private String name;
-    private String img;
+
+
     private String detail;
     private Double price ;
     private long amount ;
@@ -23,7 +25,8 @@ public class Product {
     @ManyToOne
     private Trademark trademark;
 
-
+    @OneToMany
+    private List<ImgProduct> img;
     @ManyToOne
     private Shop shop;
 }
