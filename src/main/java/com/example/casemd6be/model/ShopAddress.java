@@ -7,21 +7,11 @@ import java.util.List;
 
 @Entity
 @Data
-public class Product {
+public class ShopAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
 
-
-    private String detail;
-    private Double price ;
-    private long amount ;
-
-    @ManyToOne
-    private Category category;
-
-    @ManyToOne
-    private Shop shop;
 }

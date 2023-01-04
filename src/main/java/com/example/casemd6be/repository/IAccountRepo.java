@@ -23,7 +23,9 @@ public interface IAccountRepo extends CrudRepository<Account, Long> {
 
     @Query(nativeQuery = true,value = "SELECT * from account where phone_number = :phoneNumber")
     Account findByPhoneNumber(String phoneNumber);
-    Account findByUsername(String username);
+
+    @Query(nativeQuery = true,value = "SELECT * from account where username = :username")
+    Account findByUsername( String username);
 
     Account findAccountById(long id);
 

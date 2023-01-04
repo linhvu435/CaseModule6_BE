@@ -15,10 +15,10 @@ public class Shop {
 
     private String name;
     private long status;
-    private String address;
     private String img;
 
-
+    @OneToOne
+    private ShopAddress shopAddress;
     @OneToOne
     private Account account;
 
