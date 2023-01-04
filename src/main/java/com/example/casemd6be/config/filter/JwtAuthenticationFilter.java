@@ -1,4 +1,4 @@
-package com.example.casemd6be.filter;
+package com.example.casemd6be.config.filter;
 
 import com.example.casemd6be.service.AccountService;
 import com.example.casemd6be.service.JwtService;

@@ -3,6 +3,7 @@ package com.example.casemd6be.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data

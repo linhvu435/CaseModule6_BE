@@ -1,4 +1,4 @@
-package com.example.casemd6be.filter;
+package com.example.casemd6be.config;
 
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;

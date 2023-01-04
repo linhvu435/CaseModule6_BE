@@ -25,6 +25,6 @@ public class Account {
     private String gender;
     private String img;
     private long status;
-    @OneToMany
-    private List<Roles> roles;
+    @ManyToOne
+    private Roles roles;
 }

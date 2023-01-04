@@ -1,5 +1,6 @@
-package com.example.casemd6be.filter;
+package com.example.casemd6be.config;
 
+import com.example.casemd6be.config.filter.JwtAuthenticationFilter;
 import com.example.casemd6be.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
