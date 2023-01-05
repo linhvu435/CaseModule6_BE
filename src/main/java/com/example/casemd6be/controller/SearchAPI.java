@@ -1,10 +1,9 @@
 package com.example.casemd6be.controller;
 
 import com.example.casemd6be.model.Product;
-import com.example.casemd6be.repository.IAccountRepo;
-import com.example.casemd6be.repository.manh.IProductRepo;
-import com.example.casemd6be.repository.manh.IShopRepo;
-import com.example.casemd6be.repository.manh.ITrademarkRepo;
+import com.example.casemd6be.repository.manh.IProductRepoM;
+import com.example.casemd6be.repository.manh.IShopRepoM;
+import com.example.casemd6be.repository.manh.ITrademarkRepoM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +18,13 @@ import java.util.List;
 
 public class SearchAPI {
     @Autowired
-    private IProductRepo iProductRepo;
+    private IProductRepoM iProductRepo;
 
     @Autowired
-    private IShopRepo iShopRepo;
+    private IShopRepoM iShopRepo;
 
     @Autowired
-    private ITrademarkRepo iTrademarkRepo;
+    private ITrademarkRepoM iTrademarkRepo;
 
     @GetMapping("/{name}")
     public ResponseEntity<List<Product>> findByName(@PathVariable String name) {

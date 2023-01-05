@@ -1,14 +1,14 @@
 package com.example.casemd6be.service;
 
 import com.example.casemd6be.model.Product;
-import com.example.casemd6be.repository.manh.IProductRepo;
+import com.example.casemd6be.repository.manh.IProductRepoM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
     @Autowired
-    IProductRepo iProductRepo;
+    IProductRepoM iProductRepo;
 
     public void save(Product product) {
         iProductRepo.save(product);
