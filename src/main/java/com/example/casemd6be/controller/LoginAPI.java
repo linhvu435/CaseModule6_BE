@@ -3,8 +3,9 @@ package com.example.casemd6be.controller;
 
 
 import com.example.casemd6be.model.Account;
+import com.example.casemd6be.model.dto.UserToken;
 import com.example.casemd6be.repository.IAccountRepo;
-import com.example.casemd6be.service.JwtService;
+import com.example.casemd6be.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("/login")
 public class LoginAPI {
   @Autowired
   AuthenticationManager authenticationManager;
@@ -27,23 +29,22 @@ public class LoginAPI {
 
   @Autowired
   IAccountRepo iAccountRepo;
-
-  @GetMapping("/getallaccount")
+  @Autowired
+  AccountService accountService;
+  @GetMapping()
   public List<Account> getAccount() {
     return (List<Account>) iAccountRepo.findAll();
   }
 
-  @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody Account account) {
-    try {
-      Authentication authentication = authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(account.getUsername(), account.getPassword()));
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-
-      String token = jwtService.createToken(authentication);
-      return new ResponseEntity<>(token, HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
-    }
+  @PostMapping()
+  public ResponseEntity<UserToken> login(@RequestBody Account account) {
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(account.getUsername(), account.getPassword()));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String token = jwtService.generateTokenLogin(authentication);
+    Account account1 = accountService.findByName(account.getUsername());
+    UserToken userToken = new UserToken(account.getUsername(), account1.getRoles(), token, account1.getId());
+    return new ResponseEntity<>(userToken, HttpStatus.OK);
   }
+
 }
