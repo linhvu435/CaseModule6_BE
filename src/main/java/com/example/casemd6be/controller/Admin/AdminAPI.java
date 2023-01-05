@@ -17,7 +17,7 @@ public class AdminAPI {
     IAccountRepoS iAccountRepo;
 
     @GetMapping("/showAccount/{id}")
-    public ResponseEntity<Iterable<Account>> showAccountByRoles(@PathVariable ("id") Long id) {
+    public ResponseEntity<Iterable<Account>> showAccountByRoles(@PathVariable("id") Long id) {
         Iterable<Account> accounts = iAccountRepo.findByIdRoles(id);
         if (!accounts.iterator().hasNext()) {
             new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -25,9 +25,9 @@ public class AdminAPI {
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
-    @GetMapping("/seach")
-    public ResponseEntity<Iterable<Account>> showAllByName(@RequestParam("search") String search) {
-        Iterable<Account> accounts1 =iAccountRepo.findAccountByUsername(search);
+    @GetMapping("/seach/{username}")
+    public ResponseEntity<Iterable<Account>> showAllByName(@PathVariable("username") String username) {
+        Iterable<Account> accounts1 = iAccountRepo.findAccountByUsername(username);
         if (!accounts1.iterator().hasNext()) {
             new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -35,14 +35,21 @@ public class AdminAPI {
     }
 
 
-
-    @GetMapping("/{id}")
+    @GetMapping("/account/{id}")
     public ResponseEntity<Account> showOne(@PathVariable("id") Long id) {
         Optional<Account> account = iAccountRepo.findById(id);
         if (!account.isPresent()) {
             new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(account.get(), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Account> update(@RequestBody Account accountEdit, @PathVariable("id") Long id) {
+        Optional<Account> accounts = iAccountRepo.findById(id);
+    accountEdit.setId(accounts.get().getId());
+    accountEdit =iAccountRepo.save(accountEdit);
+        return new ResponseEntity<>(accountEdit, HttpStatus.OK);
     }
 
 }
