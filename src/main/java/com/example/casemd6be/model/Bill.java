@@ -19,7 +19,7 @@ public class Bill {
 
     private long status;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Product> product;
 
     @ManyToOne

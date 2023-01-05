@@ -13,4 +13,11 @@ public interface IBillRepoM extends PagingAndSortingRepository<Bill,Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM bill ")
     List<Bill> findAllB();
 
+    @Query(nativeQuery = true, value = "SELECT * FROM bill where account_id = :account_id")
+    List<Bill> findAllB(long account_id);
+
+
+
+
+
 }
