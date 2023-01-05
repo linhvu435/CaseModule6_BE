@@ -1,8 +1,9 @@
-package com.example.casemd6be.controller;
+package com.example.casemd6be.controller.account;
 
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.JwtResponse;
 import com.example.casemd6be.model.Roles;
+import com.example.casemd6be.repository.sang.AccountRepo;
 import com.example.casemd6be.service.JwtService;
 import com.example.casemd6be.service.impl.AccountServiceImpl;
 import com.example.casemd6be.service.impl.RolesServiceImpl;
@@ -45,6 +46,8 @@ public class AccountAPI {
 
     @Autowired
     private  RolesServiceImpl rolesService;
+    @Autowired
+    private AccountRepo accountRepo;
 
 
     @GetMapping("/users")
@@ -73,14 +76,30 @@ public class AccountAPI {
                 return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
             }
         }
-        Roles roles2 = new Roles();
-        roles2.setId(1);
-        roles2.setName("ROLE_USER");
-        account.setRoles(roles2);
+        if (account.getRoles() != null) {
+            Roles role = rolesService.findByName("ROLE_ADMIN");
+            Set<Roles> roles = new HashSet<>();
+            roles.add(role);
+            account.setRoles(role);
+        } else {
+            Roles role1 = rolesService.findByName("ROLE_USER");
+            Set<Roles> roles1 = new HashSet<>();
+            roles1.add(role1);
+            account.setRoles(role1);
+        }
         account.setPassword(account.getPassword());
         accountService.save(account);
         return new ResponseEntity<>(account, HttpStatus.CREATED);
     }
+
+//        Roles roles2 = new Roles();
+//        roles2.setId(2);
+//        roles2.setName("ROLE_USER");
+//        account.setRoles(roles2);
+//        account.setPassword(account.getPassword());
+//        accountService.save(account);
+//        return new ResponseEntity<>(account, HttpStatus.CREATED);
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Account account) {
@@ -130,7 +149,6 @@ public class AccountAPI {
 //        if (login(userTest).getStatusCode().equals(HttpStatus.OK)) {
 //            account.setId(userOptional.get().getId());
 //            account.setUsername(userOptional.get().getUsername());
-//            account.setEnabled(userOptional.get().isEnabled());
 //            account.setImg(userOptional.get().getImg());
 //            account.setAddress(userOptional.get().getAddress());
 //            account.setBirthday(userOptional.get().getBirthday());

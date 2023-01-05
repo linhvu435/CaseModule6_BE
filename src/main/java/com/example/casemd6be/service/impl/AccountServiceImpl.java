@@ -93,6 +93,7 @@ public class AccountServiceImpl implements IAccountService {
         }
         return isRegister;
     }
+
     public Account findByName(String name) {
         return accountRepo.findByUsername(name);
     }
