@@ -1,7 +1,7 @@
 package com.example.casemd6be.service;
 
 import com.example.casemd6be.model.Product;
-import com.example.casemd6be.repository.IProductRepo;
+import com.example.casemd6be.repository.manh.IProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
