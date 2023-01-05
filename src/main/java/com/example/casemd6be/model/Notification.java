@@ -15,9 +15,5 @@ public class Notification {
     @ManyToOne
     private Account account;
 
-    @ManyToOne
-    private Order order;
 
-    @ManyToOne
-    private Comment comment;
 }

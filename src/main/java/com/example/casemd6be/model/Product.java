@@ -26,4 +26,19 @@ public class Product {
 
     @ManyToOne
     private Shop shop;
+
+    public Product(String name, String img, String detail, Double price, long amount, Category category, Trademark trademark, Shop shop) {
+        this.name = name;
+        this.img = img;
+        this.detail = detail;
+        this.price = price;
+        this.amount = amount;
+        this.category = category;
+        this.trademark = trademark;
+        this.shop = shop;
+    }
+
+    public Product() {
+
+    }
 }

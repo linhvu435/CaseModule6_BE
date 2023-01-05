@@ -17,6 +17,8 @@ public class Bill {
 
     private LocalDate Date;
 
+    private long status;
+
     @ManyToMany
     private List<Product> product;
 
