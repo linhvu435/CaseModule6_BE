@@ -40,11 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/**");
 
-<<<<<<< HEAD
+
         http.authorizeRequests().antMatchers( "/login/**", "/register/**","/search/**","/products/**","/admin/**","/shop/**","/category/**").permitAll();
-=======
+
         http.authorizeRequests().antMatchers( "/login/**", "/register","/search/**","/products/**","/admin/**","/order/**").permitAll();
->>>>>>> 9c0ea315063e8e2e11733bb459e6da935daddb7d
+
         http.authorizeRequests().antMatchers( "/login", "/registers/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable();
