@@ -7,26 +7,19 @@ import java.util.Collection;
 public class JwtResponse {
     private Long id;
     private String token;
-    private String type = "Bearer";
+//    private String type = "Bearer";
     private String username;
     private String email;
     private String img;
     private Collection<? extends GrantedAuthority> roles;
 
-    public JwtResponse(String accessToken, Long id, String username, Collection<? extends GrantedAuthority> roles) {
-        this.token = accessToken;
-        this.username = username;
-        this.roles = roles;
+    public JwtResponse(Long id, String token, String username, String email, String img, Collection<? extends GrantedAuthority> roles) {
         this.id = id;
-    }
-
-    public JwtResponse(String accessToken, Long id, String username, String email, String img, Collection<? extends GrantedAuthority> roles) {
-        this.token = accessToken;
+        this.token = token;
         this.username = username;
         this.email = email;
         this.img = img;
         this.roles = roles;
-        this.id = id;
     }
 
     public Long getId() {
@@ -37,20 +30,12 @@ public class JwtResponse {
         this.id = id;
     }
 
-    public String getAccessToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.token = accessToken;
-    }
-
-    public String getTokenType() {
-        return type;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.type = tokenType;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUsername() {

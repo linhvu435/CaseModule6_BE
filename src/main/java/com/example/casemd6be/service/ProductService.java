@@ -5,6 +5,8 @@ import com.example.casemd6be.repository.manh.IProductRepoM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductService {
     @Autowired
@@ -24,5 +26,8 @@ public class ProductService {
 
     public Product finByID(long id) {
         return iProductRepo.findById(id).get();
+    }
+    public List<Product> getProductByShopId(long id){
+        return iProductRepo.findProductByShopId(id);
     }
 }
