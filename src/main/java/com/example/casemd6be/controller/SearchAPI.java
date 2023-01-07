@@ -1,6 +1,7 @@
 package com.example.casemd6be.controller;
 
 import com.example.casemd6be.model.Product;
+import com.example.casemd6be.repository.manh.ICategoryM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.manh.IShopRepoM;
 import com.example.casemd6be.repository.manh.ITrademarkRepoM;
@@ -21,11 +22,13 @@ public class SearchAPI {
     private IProductRepoM iProductRepo;
 
     @Autowired
-    private IShopRepoM iShopRepo;
+    ICategoryM iCategoryM;
 
-    @Autowired
-    private ITrademarkRepoM iTrademarkRepo;
 
+    @GetMapping("/getallcategory")
+    public ResponseEntity<?> getallcategory() {
+        return new ResponseEntity<>(iCategoryM.findAllCategory(), HttpStatus.OK);
+    }
     @GetMapping("/{name}")
     public ResponseEntity<List<Product>> findByName(@PathVariable String name) {
         return new ResponseEntity<>(iProductRepo.findByName(name), HttpStatus.OK);
