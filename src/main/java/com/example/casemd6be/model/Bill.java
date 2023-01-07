@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -15,9 +16,11 @@ public class Bill {
 
     private Double totalprice;
 
-    private LocalDate Date;
+    private LocalDateTime Date;
 
-    private long status;
+    @ManyToOne
+    private BillStatus billStatus;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Product> product;
