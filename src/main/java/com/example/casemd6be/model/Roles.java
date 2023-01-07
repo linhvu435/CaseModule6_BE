@@ -27,4 +27,5 @@ public class Roles implements Serializable, GrantedAuthority {
     public String getAuthority() {
         return name;
     }
+
 }
