@@ -4,7 +4,7 @@ package com.example.casemd6be.controller;
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.Roles;
 import com.example.casemd6be.repository.IAccountRepo;
-import com.example.casemd6be.service.AccountService;
+import com.example.casemd6be.service.impl.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class RegisterApi {
 
 
   @Autowired
-  AccountService accountService;
+  AccountServiceImpl accountService;
 
   @PostMapping("/register")
   public ResponseEntity<Account> register(@RequestBody Account account){
