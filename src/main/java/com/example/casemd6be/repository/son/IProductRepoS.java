@@ -16,6 +16,12 @@ public interface IProductRepoS extends PagingAndSortingRepository<Product, Long>
 
     Optional<Product> findById(Long id);
 
+    @Query(nativeQuery = true,value = "SELECT * from product where id = :id")
+    Product findProductById(long id);
+
+
+
+
 
 
 }
