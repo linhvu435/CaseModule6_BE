@@ -13,4 +13,6 @@ public class StarProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+
 }
