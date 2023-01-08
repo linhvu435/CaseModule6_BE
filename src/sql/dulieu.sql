@@ -65,3 +65,4 @@ INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('2', 'Đang giao hàn
 INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('3', 'Đã nhận được hàng');
 INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('4', 'Hủy đơn hàng');
 INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('5', 'Đánh giá');
+

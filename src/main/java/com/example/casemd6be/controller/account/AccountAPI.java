@@ -80,7 +80,7 @@ public ResponseEntity<?> createUser(@Valid @RequestBody Account account, Binding
         Roles role = rolesService.findByName("ROLE_ADMIN");
         Set<Roles> roles = new HashSet<>();
         roles.add(role);
-        account.setRoles( roles);
+        account.setRoles(role);
     } else {
         Roles role1 = rolesService.findByName("ROLE_USER");
         Set<Roles> roles1 = new HashSet<>();
