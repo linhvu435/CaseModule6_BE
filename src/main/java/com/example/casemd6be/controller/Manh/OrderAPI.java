@@ -39,8 +39,8 @@ public class OrderAPI {
     IShopRepoM iShopRepoM;
 
     @GetMapping("/getallp")
-    public ResponseEntity<List<Product>> getallPByShop(){
-        return new ResponseEntity<>(iProductRepoM.findAllP(),HttpStatus.OK);
+    public ResponseEntity<List<Product>> getallPByShop() {
+        return new ResponseEntity<>(iProductRepoM.findAllP(), HttpStatus.OK);
     }
 
     @GetMapping("/getallbill")
@@ -54,17 +54,17 @@ public class OrderAPI {
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         Shop shop = iShopRepoM.findShopByAccountId(account.getId());
         List<Bill> bills1 = iBillRepoM.findAllByShop_Id(shop.getId());
-        List<Bill> billList ;
+        List<Bill> billList;
         for (int i = 0; i < bills1.size(); i++) {
-            for (int j = 1; j < bills1.size() ; j++) {
-                if (bills1.get(i).getId()==bills1.get(j).getId()){
+            for (int j = 1; j < bills1.size(); j++) {
+                if (bills1.get(i).getId() == bills1.get(j).getId()) {
                     bills1.remove(bills1.get(i));
                 }
             }
         }
         for (int i = 0; i < bills1.size(); i++) {
             for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
-                if(bills1.get(i).getProduct().get(j).getShop().getId() != shop.getId() ){
+                if (bills1.get(i).getProduct().get(j).getShop().getId() != shop.getId()) {
                     bills1.get(i).getProduct().remove(bills1.get(i).getProduct().get(j));
                 }
             }
@@ -81,50 +81,64 @@ public class OrderAPI {
         List<Bill> bills1 = iBillRepoM.findAllByShop_IdDesc(shop.getId());
         return new ResponseEntity<>(bills1, HttpStatus.OK);
     }
+
     @GetMapping("/searchBill/{name}")
     public ResponseEntity<List<Bill>> searchbill(@PathVariable String name) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Bill> bills = iBillRepoM.findAllB();
         List<Product> products = iProductRepoM.findByName(name);
-        List<Bill> billList =new ArrayList<>();
+        List<Bill> billList = new ArrayList<>();
 
         return new ResponseEntity<>(iBillRepoM.findAllB(), HttpStatus.OK);
     }
-
-
 
 
     @PostMapping("/createbill")
     public ResponseEntity<?> searchbill(@RequestBody Bill bill) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
-        List<Product> products1 = bill.getProduct();
-        List<Product> products = new ArrayList<>();
-        boolean check = true;
-        for (int i = 0; i < products1.size(); i++) {
-            products.add(iProductRepoS.findProductById(products1.get(i).getId()));
+        List<Product> p = bill.getProduct();
+        List<Product> products1 = new ArrayList<>();
+//        thêm các sp từ id truyen vao
+        for (int i = 0; i < p.size(); i++) {
+            products1.add(iProductRepoS.findProductById(p.get(i).getId()));
         }
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getShop().getAccount().getId() == account.getId()){
-                check = false;
-                break;
+        List<Product> products = new ArrayList<>();
+        List<Shop> shops1 = new ArrayList<>();
+        List<Shop> shops = iShopRepoM.findAllShop();
+        LocalDateTime dateTime = LocalDateTime.now();
+        //kiểm tra shop của các sp rồi thêm các shop vòa mảng
+        for (int i = 0; i < shops.size(); i++) {
+            for (int j = 0; j < products1.size(); j++) {
+                if (products1.get(j).getShop().getId() == shops.get(i).getId()) {
+                    shops1.add(shops.get(i));
+                    break;
+                }
             }
         }
-        if(check){
+        //tạo bill cho các sp của từng shop
+        for (int i = 0; i < shops1.size(); i++) {
+            for (int j = 0; j < products1.size(); j++) {
+                if (shops1.get(i).getId() == products1.get(j).getShop().getId()) {
+                    products.add(products1.get(j));
+                }
+            }
             bill.setProduct(products);
             bill.setAccount(account);
-            bill.setDate(LocalDateTime.now());
+            bill.setDate(dateTime);
             BillStatus billStatus =new BillStatus();
             billStatus.setId(1);
             billStatus.setName("Chờ xác nhận");
             bill.setBillStatus(billStatus);
             iBillRepoM.save(bill);
-            return new ResponseEntity<>(products, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>("Ồ đéo được rồi", HttpStatus.BAD_REQUEST);
+            products = new ArrayList<>();
+            bill=new Bill();
         }
-    }
+            return new ResponseEntity<>("Tạo bill thành công", HttpStatus.BAD_REQUEST);
+        }
+
+
 
     @PostMapping("/setbill/{id}")
     public ResponseEntity<Bill> setbill(@PathVariable long id,@RequestBody Bill bill) {
