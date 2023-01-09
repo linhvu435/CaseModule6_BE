@@ -3,7 +3,6 @@ package com.example.casemd6be.controller.account;
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.JwtResponse;
 import com.example.casemd6be.model.Roles;
-import com.example.casemd6be.repository.sang.AccountRepo;
 import com.example.casemd6be.service.JwtService;
 import com.example.casemd6be.service.impl.AccountServiceImpl;
 import com.example.casemd6be.service.impl.RolesServiceImpl;
@@ -20,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.validation.Valid;
 import java.util.*;
@@ -45,9 +45,7 @@ public class AccountAPI {
     private AccountServiceImpl accountService;
 
     @Autowired
-    private  RolesServiceImpl rolesService;
-    @Autowired
-    private AccountRepo accountRepo;
+    private RolesServiceImpl rolesService;
 
 
     @GetMapping("/users")
@@ -76,30 +74,14 @@ public class AccountAPI {
                 return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
             }
         }
-        if (account.getRoles() != null) {
-            Roles role = rolesService.findByName("ROLE_ADMIN");
-            Set<Roles> roles = new HashSet<>();
-            roles.add(role);
-            account.setRoles(role);
-        } else {
-            Roles role1 = rolesService.findByName("ROLE_USER");
-            Set<Roles> roles1 = new HashSet<>();
-            roles1.add(role1);
-            account.setRoles(role1);
-        }
+        Roles roles2 = new Roles();
+        roles2.setId(1);
+        roles2.setName("ROLE_USER");
+        account.setRoles(roles2);
         account.setPassword(account.getPassword());
         accountService.save(account);
         return new ResponseEntity<>(account, HttpStatus.CREATED);
     }
-
-//        Roles roles2 = new Roles();
-//        roles2.setId(2);
-//        roles2.setName("ROLE_USER");
-//        account.setRoles(roles2);
-//        account.setPassword(account.getPassword());
-//        accountService.save(account);
-//        return new ResponseEntity<>(account, HttpStatus.CREATED);
-//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Account account) {
@@ -131,80 +113,12 @@ public class AccountAPI {
         }
         account.setId(userOptional.get().getId());
         account.setUsername(userOptional.get().getUsername());
-//        account.setEnabled(userOptional.get().isEnabled());
         account.setPassword(userOptional.get().getPassword());
         account.setRoles(userOptional.get().getRoles());
         account.setImg(userOptional.get().getImg());
         accountService.save(account);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
-
-//    @PutMapping("/users/change-password/{id}")
-//    public ResponseEntity<Account> updateUserPassword(@PathVariable Long id, @RequestBody Account account, @RequestParam("currentPassword") String oldPassword) {
-//        Optional<Account> userOptional = this.accountService.findById(id);
-//        Account userTest = new Account(userOptional.get().getUsername(), oldPassword);
-//        if (!userOptional.isPresent()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        if (login(userTest).getStatusCode().equals(HttpStatus.OK)) {
-//            account.setId(userOptional.get().getId());
-//            account.setUsername(userOptional.get().getUsername());
-//            account.setImg(userOptional.get().getImg());
-//            account.setAddress(userOptional.get().getAddress());
-//            account.setBirthday(userOptional.get().getBirthday());
-//            account.setEmail(userOptional.get().getEmail());
-//            account.setPhoneNumber(userOptional.get().getPhoneNumber());
-//            account.setRoles(userOptional.get().getRoles());
-//            account.setPassword(account.getPassword());
-//            accountService.save(account);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(account, HttpStatus.OK);
-//    }
-
-//    @PutMapping("/users/change-img/{id}")
-//    public ResponseEntity<Account> updateUserAvatar(@PathVariable Long id, @RequestBody Account account) {
-//        Optional<Account> userOptional = this.accountService.findById(id);
-//        if (!userOptional.isPresent()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        account.setId(userOptional.get().getId());
-//        account.setUsername(userOptional.get().getUsername());
-//        account.setEnabled(userOptional.get().isEnabled());
-//        account.setAddress(userOptional.get().getAddress());
-//        account.setBirthday(userOptional.get().getBirthday());
-//        account.setEmail(userOptional.get().getEmail());
-//        account.setPhoneNumber(userOptional.get().getPhoneNumber());
-//        account.setRoles(userOptional.get().getRoles());
-//        account.setPassword(userOptional.get().getPassword());
-//        if (account.getImg().equals("")) {
-//            account.setImg(userOptional.get().getImg());
-//            accountService.save(account);
-//        } else {
-//            accountService.save(account);
-//        }
-//        return new ResponseEntity<>(account, HttpStatus.OK);
-//    }
-//
-//
-//    @ExceptionHandler({ConstraintViolationException.class})
-//    public ResponseEntity<Object> handleConstraintViolation(
-//            ConstraintViolationException ex, WebRequest request) {
-////        List<String> errors = new ArrayList<String>();
-//        Map<String, String> errors = new HashMap<>();
-//        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-////            errors.add(violation.getRootBeanClass().getName() + " " +
-////                    violation.getPropertyPath() + ": " + violation.getMessage());
-//            String path = String.valueOf(violation.getPropertyPath());
-//            errors.put(path.replace("createUser.user.", ""), violation.getMessage());
-//        }
-//
-//        ApiError apiError =
-//                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-//        return new ResponseEntity<Object>(
-//                apiError, new HttpHeaders(), apiError.getStatus());
-//    }
 
     //    thêm
     @GetMapping("/checkUsername")

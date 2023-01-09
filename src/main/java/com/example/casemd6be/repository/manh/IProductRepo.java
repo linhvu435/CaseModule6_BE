@@ -1,17 +1,19 @@
 package com.example.casemd6be.repository.manh;
 
 import com.example.casemd6be.model.Category;
+import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.Product;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 
-public interface IProductRepoM extends PagingAndSortingRepository<Product,Long> {
+public interface IProductRepo extends PagingAndSortingRepository<Product,Long> {
     @Query(nativeQuery = true,value = "SELECT * from product where shop_id = :shop_id")
     List<Product> findProductByShopId(long shop_id);
 

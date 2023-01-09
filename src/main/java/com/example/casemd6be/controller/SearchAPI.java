@@ -1,10 +1,11 @@
 package com.example.casemd6be.controller;
 
 import com.example.casemd6be.model.Product;
+import com.example.casemd6be.repository.IAccountRepo;
+import com.example.casemd6be.repository.manh.IProductRepo;
+import com.example.casemd6be.repository.manh.IShopRepo;
+import com.example.casemd6be.repository.manh.ITrademarkRepo;
 import com.example.casemd6be.repository.manh.ICategoryM;
-import com.example.casemd6be.repository.manh.IProductRepoM;
-import com.example.casemd6be.repository.manh.IShopRepoM;
-import com.example.casemd6be.repository.manh.ITrademarkRepoM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,14 @@ import java.util.List;
 
 public class SearchAPI {
     @Autowired
-    private IProductRepoM iProductRepo;
+    private IProductRepo iProductRepo;
 
     @Autowired
+    private IShopRepo iShopRepo;
     ICategoryM iCategoryM;
 
+    @Autowired
+    private ITrademarkRepo iTrademarkRepo;
 
     @GetMapping("/getallcategory")
     public ResponseEntity<?> getallcategory() {

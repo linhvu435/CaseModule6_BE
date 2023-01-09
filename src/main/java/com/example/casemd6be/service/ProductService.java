@@ -1,7 +1,7 @@
 package com.example.casemd6be.service;
 
 import com.example.casemd6be.model.Product;
-import com.example.casemd6be.repository.manh.IProductRepoM;
+import com.example.casemd6be.repository.manh.IProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class ProductService {
     @Autowired
-    IProductRepoM iProductRepo;
+    IProductRepo iProductRepo;
 
     public void save(Product product) {
         iProductRepo.save(product);

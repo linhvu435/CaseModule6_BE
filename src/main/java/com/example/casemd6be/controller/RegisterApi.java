@@ -42,34 +42,4 @@ public class RegisterApi {
   }
 
 
-//  @GetMapping("/checkUsername")
-//  public ResponseEntity<Account> checkUser(@RequestParam String userName) {
-//    Account account = accountService.findByName(userName);
-//    if (account==null){
-//      return new ResponseEntity<>(account,HttpStatus.OK);
-//    }else {
-//      return new ResponseEntity<>(account, HttpStatus.BAD_REQUEST);
-//    }
-//  }
-//
-//  @GetMapping("/checkPhonenumber")
-//  public ResponseEntity<Account> checkPhoneNumber(@RequestParam String phoneNumber) {
-//    Account account = accountService.findbysdt(phoneNumber);
-//    if (account==null){
-//      return new ResponseEntity<>(account,HttpStatus.OK);
-//    }else {
-//      return new ResponseEntity<>(account, HttpStatus.BAD_REQUEST);
-//    }
-//  }
-//
-//  @GetMapping("/check/{username}&{phoneNumber}")
-//  public  ResponseEntity<Account> check( @PathVariable String username , @PathVariable String phoneNumber){
-//    Account account1 = iAccountRepo.findAccountByPhoneNumberAndUsername(username, phoneNumber);
-//    if (account1 != null) {
-//      return new ResponseEntity<>(account1, HttpStatus.OK);
-//    } else {
-//      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//    }
-//  }
-
 }
