@@ -2,6 +2,7 @@ package com.example.casemd6be.controller.Manh;
 
 import com.example.casemd6be.model.*;
 import com.example.casemd6be.repository.manh.IBillRepoM;
+import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.manh.IShopRepoM;
 import com.example.casemd6be.repository.son.IAccountRepoS;
@@ -22,21 +23,19 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping(path = "/order")
 public class OrderAPI {
-
-
-    @Autowired
-    IBillRepoM iBillRepoM;
     @Autowired
     private IAccountRepoS iAccountRepo;
 
     @Autowired
     private IProductRepoM iProductRepoM;
-
     @Autowired
     IProductRepoS iProductRepoS;
-
     @Autowired
     IShopRepoM iShopRepoM;
+    @Autowired
+    private IBillStatusM iBillStatusM;
+    @Autowired
+    private IBillRepoM iBillRepoM;
 
     @GetMapping("/getallp")
     public ResponseEntity<List<Product>> getallPByShop() {
@@ -48,49 +47,26 @@ public class OrderAPI {
         return new ResponseEntity<>(iBillRepoM.findAllB(), HttpStatus.OK);
     }
 
+    @GetMapping("/getallbillstatus")
+    public ResponseEntity<List<BillStatus>> getallbillstatus() {
+        return new ResponseEntity<>(iBillStatusM.findAllBillStatus(), HttpStatus.OK);
+    }
+
     @GetMapping("/showBillShop")
     public ResponseEntity<?> showbillshop() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
-        Shop shop = iShopRepoM.findShopByAccountId(account.getId());
-        List<Bill> bills1 = iBillRepoM.findAllByShop_Id(shop.getId());
-        List<Bill> billList;
-        for (int i = 0; i < bills1.size(); i++) {
-            for (int j = 1; j < bills1.size(); j++) {
-                if (bills1.get(i).getId() == bills1.get(j).getId()) {
-                    bills1.remove(bills1.get(i));
-                }
-            }
-        }
+        List<Bill> bills1 = iBillRepoM.findAllB();
+        List<Bill> billList=new ArrayList<>();
         for (int i = 0; i < bills1.size(); i++) {
             for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
-                if (bills1.get(i).getProduct().get(j).getShop().getId() != shop.getId()) {
-                    bills1.get(i).getProduct().remove(bills1.get(i).getProduct().get(j));
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()){
+                    billList.add(bills1.get(i));
+                    break;
                 }
             }
         }
-
-        return new ResponseEntity<>(shop.getId(), HttpStatus.OK);
-    }
-
-    @GetMapping("/sapxep")
-    public ResponseEntity<?> sapxep() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
-        Shop shop = iShopRepoM.findShopByAccountId(account.getId());
-        List<Bill> bills1 = iBillRepoM.findAllByShop_IdDesc(shop.getId());
-        return new ResponseEntity<>(bills1, HttpStatus.OK);
-    }
-
-    @GetMapping("/searchBill/{name}")
-    public ResponseEntity<List<Bill>> searchbill(@PathVariable String name) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
-        List<Bill> bills = iBillRepoM.findAllB();
-        List<Product> products = iProductRepoM.findByName(name);
-        List<Bill> billList = new ArrayList<>();
-
-        return new ResponseEntity<>(iBillRepoM.findAllB(), HttpStatus.OK);
+        return new ResponseEntity<>(billList, HttpStatus.OK);
     }
 
 
@@ -140,9 +116,10 @@ public class OrderAPI {
 
 
 
-    @PostMapping("/setbill/{id}")
-    public ResponseEntity<Bill> setbill(@PathVariable long id,@RequestBody Bill bill) {
-        BillStatus billStatus = iBillRepoM.findStatusById(id);
+    @PostMapping("/setbill/{idbill}/{idstatus}")
+    public ResponseEntity<Bill> setbill(@PathVariable long idbill,@PathVariable long idstatus) {
+        Bill bill = iBillRepoM.findBillById(idbill);
+        BillStatus billStatus = iBillStatusM.findBillStatusById(idstatus);
         bill.setBillStatus(billStatus);
         iBillRepoM.save(bill);
         return new ResponseEntity<>(bill, HttpStatus.OK);

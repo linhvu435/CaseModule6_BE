@@ -23,12 +23,6 @@ INSERT INTO `casemd6`.`trademark` (`id`, `name`, `category_id`) VALUES ('1', 'NI
 INSERT INTO `casemd6`.`trademark` (`id`, `name`, `category_id`) VALUES ('2', 'GUCCI', '1');
 INSERT INTO `casemd6`.`trademark` (`id`, `name`, `category_id`) VALUES ('3', 'VIP', '2');
 
-
-
-
-
-
-
 -- shopaddress
 INSERT INTO `casemd6`.`shop_address` (`name`) VALUES ('An Giang');
 INSERT INTO `casemd6`.`shop_address` (`name`) VALUES ('Bà Rịa-Vũng Tàu');
