@@ -26,7 +26,7 @@ public interface IAccountRepoS extends PagingAndSortingRepository<Account, Long>
     @Query(nativeQuery = true,value = "SELECT * from account where phone_number = :phone_number")
     List<Account> findByAccountPhoneNumber(@Param("phone_number") String phone_number);
 
-    @Query(nativeQuery = true,value = "SELECT * from account join roles on account.id = roles.id where roles.id = :id")
+    @Query(nativeQuery = true,value = "SELECT * from account where roles_id = :id")
     List<Account> findByIdRoles(Long id);
 
     @Query(nativeQuery = true,value = "SELECT * from account where username like concat('%',:username,'%')")
@@ -36,6 +36,8 @@ public interface IAccountRepoS extends PagingAndSortingRepository<Account, Long>
     Account findByUsername (String username);
 
 
+    @Query(nativeQuery = true,value = "SELECT * from account where id = :id")
+    Account findByIdUsername (Long id);
 
 
 }
