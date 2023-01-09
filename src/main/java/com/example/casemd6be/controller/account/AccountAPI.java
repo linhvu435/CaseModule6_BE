@@ -3,6 +3,7 @@ package com.example.casemd6be.controller.account;
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.JwtResponse;
 import com.example.casemd6be.model.Roles;
+import com.example.casemd6be.repository.sang.AccountRepo;
 import com.example.casemd6be.service.JwtService;
 import com.example.casemd6be.service.impl.AccountServiceImpl;
 import com.example.casemd6be.service.impl.RolesServiceImpl;
@@ -19,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 
 import javax.validation.Valid;
 import java.util.*;
@@ -45,7 +45,9 @@ public class AccountAPI {
     private AccountServiceImpl accountService;
 
     @Autowired
-    private RolesServiceImpl rolesService;
+    private  RolesServiceImpl rolesService;
+    @Autowired
+    private AccountRepo accountRepo;
 
 
     @GetMapping("/users")
@@ -59,29 +61,58 @@ public class AccountAPI {
         Iterable<Account> accounts = accountService.findAll();
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody Account account, BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Iterable<Account> accounts = accountService.findAll();
-        for (Account currentUser : accounts) {
-            if (currentUser.getUsername().equals(account.getUsername())) {
-                return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
-            }
-            if (currentUser.getEmail().equals(account.getEmail())) {
-                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
-            }
-        }
-        Roles roles2 = new Roles();
-        roles2.setId(1);
-        roles2.setName("ROLE_USER");
-        account.setRoles(roles2);
-        account.setPassword(account.getPassword());
-        accountService.save(account);
-        return new ResponseEntity<>(account, HttpStatus.CREATED);
+//them lại
+@PostMapping("/register")
+public ResponseEntity<?> createUser(@Valid @RequestBody Account account, BindingResult bindingResult) {
+    if (bindingResult.hasFieldErrors()) {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    Iterable<Account> accounts = accountService.findAll();
+    for (Account currentUser : accounts) {
+        if (currentUser.getUsername().equals(account.getUsername())) {
+            return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
+        }
+        if (currentUser.getEmail().equals(account.getEmail())) {
+            return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
+        }
+    }
+    if (account.getRoles() != null) {
+        Roles role = rolesService.findByName("ROLE_ADMIN");
+        Set<Roles> roles = new HashSet<>();
+        roles.add(role);
+        account.setRoles(role);
+    } else {
+        Roles role1 = rolesService.findByName("ROLE_USER");
+        Set<Roles> roles1 = new HashSet<>();
+        roles1.add(role1);
+        account.setRoles((Roles) roles1);
+    }
+    account.setPassword(account.getPassword());
+    accountService.save(account);
+    return new ResponseEntity<>("lỗi", HttpStatus.CREATED);
+}
+
+//    aaaaaaaaaaaaaaa
+//    @PostMapping("/register")
+//    public ResponseEntity<?> createUser(@RequestBody Account account) {
+//        Iterable<Account> accounts = accountService.findAll();
+//        for (Account currentUser : accounts) {
+//            if (currentUser.getUsername().equals(account.getUsername())) {
+//                return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
+//            } else if (currentUser.getEmail().equals(account.getEmail())) {
+//                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
+//            }else{
+//                Roles roles2 = new Roles();
+//                roles2.setId(2);
+//                roles2.setName("ROLE_USER");
+//                account.setRoles(roles2);
+//                accountService.save(account);
+//                return new ResponseEntity<>("Lôỗi", HttpStatus.BAD_REQUEST);
+//            }
+//        }
+//        return new ResponseEntity<>(account, HttpStatus.CREATED);
+//    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Account account) {
@@ -96,7 +127,7 @@ public class AccountAPI {
         String jwt = jwtService.createToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account currentUser = accountService.findByUsername(account.getUsername());
-        return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(), currentUser.getEmail(), currentUser.getImg(), userDetails.getAuthorities()));
+        return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), currentUser.getEmail(), currentUser.getImg(), userDetails.getAuthorities()));
     }
 
     @GetMapping("/users/{id}")
@@ -113,12 +144,37 @@ public class AccountAPI {
         }
         account.setId(userOptional.get().getId());
         account.setUsername(userOptional.get().getUsername());
+//        account.setEnabled(userOptional.get().isEnabled());
         account.setPassword(userOptional.get().getPassword());
         account.setRoles(userOptional.get().getRoles());
         account.setImg(userOptional.get().getImg());
         accountService.save(account);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
+
+//    @PutMapping("/users/change-img/{id}")
+//    public ResponseEntity<Account> updateUserAvatar(@PathVariable Long id, @RequestBody Account account) {
+//        Optional<Account> userOptional = this.accountService.findById(id);
+//        if (!userOptional.isPresent()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        account.setId(userOptional.get().getId());
+//        account.setUsername(userOptional.get().getUsername());
+//        account.setEnabled(userOptional.get().isEnabled());
+//        account.setAddress(userOptional.get().getAddress());
+//        account.setBirthday(userOptional.get().getBirthday());
+//        account.setEmail(userOptional.get().getEmail());
+//        account.setPhoneNumber(userOptional.get().getPhoneNumber());
+//        account.setRoles(userOptional.get().getRoles());
+//        account.setPassword(userOptional.get().getPassword());
+//        if (account.getImg().equals("")) {
+//            account.setImg(userOptional.get().getImg());
+//            accountService.save(account);
+//        } else {
+//            accountService.save(account);
+//        }
+//        return new ResponseEntity<>(account, HttpStatus.OK);
+//    }
 
     //    thêm
     @GetMapping("/checkUsername")
