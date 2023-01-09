@@ -1,6 +1,7 @@
 package com.example.casemd6be.service.impl;
 
 import com.example.casemd6be.model.Roles;
+import com.example.casemd6be.repository.sang.RolesRepo;
 import com.example.casemd6be.service.IRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
