@@ -20,4 +20,8 @@ public class APIShop {
         ShopToken shopToken = new ShopToken(shop1.getId(),shop1.getImg(),shop1.getName(),shop1.getShopAddress().getName());
         return new ResponseEntity<>(shopToken, HttpStatus.OK);
     }
+    @GetMapping("/shop/{id}")
+    public ResponseEntity findShop(@PathVariable long id){
+        return new ResponseEntity<>(shopService.findShopById(id),HttpStatus.OK);
+    }
 }

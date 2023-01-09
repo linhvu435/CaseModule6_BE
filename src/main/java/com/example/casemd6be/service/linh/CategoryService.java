@@ -12,4 +12,7 @@ public class CategoryService {
     public Iterable<Category> getAll(){
         return categoryRepo.findAll();
     }
+    public Category findById(long id){
+        return categoryRepo.findById(id).get();
+    }
 }

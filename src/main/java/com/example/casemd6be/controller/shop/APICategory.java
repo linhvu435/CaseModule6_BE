@@ -3,10 +3,7 @@ package com.example.casemd6be.controller.shop;
 import com.example.casemd6be.model.Category;
 import com.example.casemd6be.service.linh.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
 @RestController
@@ -17,5 +14,9 @@ public class APICategory {
     @GetMapping
     public Iterable<Category> getAll(){
         return categoryService.getAll();
+    }
+    @GetMapping("{id}")
+    public Category findById(@PathVariable long id){
+        return categoryService.findById(id);
     }
 }
