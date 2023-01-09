@@ -92,28 +92,6 @@ public ResponseEntity<?> createUser(@Valid @RequestBody Account account, Binding
     return new ResponseEntity<>("lỗi", HttpStatus.CREATED);
 }
 
-//    aaaaaaaaaaaaaaa
-//    @PostMapping("/register")
-//    public ResponseEntity<?> createUser(@RequestBody Account account) {
-//        Iterable<Account> accounts = accountService.findAll();
-//        for (Account currentUser : accounts) {
-//            if (currentUser.getUsername().equals(account.getUsername())) {
-//                return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
-//            } else if (currentUser.getEmail().equals(account.getEmail())) {
-//                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
-//            }else{
-//                Roles roles2 = new Roles();
-//                roles2.setId(2);
-//                roles2.setName("ROLE_USER");
-//                account.setRoles(roles2);
-//                accountService.save(account);
-//                return new ResponseEntity<>("Lôỗi", HttpStatus.BAD_REQUEST);
-//            }
-//        }
-//        return new ResponseEntity<>(account, HttpStatus.CREATED);
-//    }
-
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Account account) {
         if (!accountService.isRegister(account)) {
@@ -127,7 +105,7 @@ public ResponseEntity<?> createUser(@Valid @RequestBody Account account, Binding
         String jwt = jwtService.createToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account currentUser = accountService.findByUsername(account.getUsername());
-        return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), currentUser.getEmail(), currentUser.getImg(), userDetails.getAuthorities()));
+        return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(), currentUser.getEmail(), currentUser.getImg(), userDetails.getAuthorities()));
     }
 
     @GetMapping("/users/{id}")
@@ -151,30 +129,6 @@ public ResponseEntity<?> createUser(@Valid @RequestBody Account account, Binding
         accountService.save(account);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
-
-//    @PutMapping("/users/change-img/{id}")
-//    public ResponseEntity<Account> updateUserAvatar(@PathVariable Long id, @RequestBody Account account) {
-//        Optional<Account> userOptional = this.accountService.findById(id);
-//        if (!userOptional.isPresent()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        account.setId(userOptional.get().getId());
-//        account.setUsername(userOptional.get().getUsername());
-//        account.setEnabled(userOptional.get().isEnabled());
-//        account.setAddress(userOptional.get().getAddress());
-//        account.setBirthday(userOptional.get().getBirthday());
-//        account.setEmail(userOptional.get().getEmail());
-//        account.setPhoneNumber(userOptional.get().getPhoneNumber());
-//        account.setRoles(userOptional.get().getRoles());
-//        account.setPassword(userOptional.get().getPassword());
-//        if (account.getImg().equals("")) {
-//            account.setImg(userOptional.get().getImg());
-//            accountService.save(account);
-//        } else {
-//            accountService.save(account);
-//        }
-//        return new ResponseEntity<>(account, HttpStatus.OK);
-//    }
 
     //    thêm
     @GetMapping("/checkUsername")

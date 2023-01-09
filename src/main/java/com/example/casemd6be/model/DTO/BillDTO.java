@@ -1,8 +1,9 @@
-package com.example.casemd6be.model.DTO;
+package com.example.casemd6be.model.dto;
+
 
 import java.util.List;
 
-public class BillDTO extends ProductBillDTO{
+public class BillDTO extends ProductBillDTO {
     List<ProductBillDTO> productBillDTOS;
 
     public BillDTO(List<ProductBillDTO> productBillDTOS) {

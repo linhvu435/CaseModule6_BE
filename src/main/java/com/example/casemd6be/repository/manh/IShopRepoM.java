@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 
-public interface IShopRepo extends PagingAndSortingRepository<Shop,Long> {
+public interface IShopRepoM extends PagingAndSortingRepository<Shop,Long> {
     @Query(nativeQuery = true,value = "SELECT * from shop where shop_address_id = :shop_address_id")
     List<Shop> findShopsByShopAddress(long shop_address_id);
 
