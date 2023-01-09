@@ -24,6 +24,9 @@ public interface IBillRepoM extends PagingAndSortingRepository<Bill,Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM casemd6.bill where id = :idbill")
     Bill findBillById(long idbill);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM casemd6.bill where bill_status_id = :id")
+    List<Bill> showbillbystatus(long id);
+
 
 
 

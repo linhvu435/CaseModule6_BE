@@ -1,6 +1,8 @@
 package com.example.casemd6be.controller.Manh;
 
 import com.example.casemd6be.model.*;
+import com.example.casemd6be.model.DTO.BillDTO;
+import com.example.casemd6be.model.DTO.ProductBillDTO;
 import com.example.casemd6be.repository.manh.IBillRepoM;
 import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
@@ -69,16 +71,39 @@ public class OrderAPI {
         return new ResponseEntity<>(billList, HttpStatus.OK);
     }
 
-
-    @PostMapping("/createbill")
-    public ResponseEntity<?> searchbill(@RequestBody Bill bill) {
+    @GetMapping("/showBillShop/{id}")
+    public ResponseEntity<?> showbillshopbystatus( @PathVariable long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
-        List<Product> p = bill.getProduct();
+        List<Bill> bills1 = iBillRepoM.findAllB();
+        List<Bill> billList=new ArrayList<>();
+        for (int i = 0; i < bills1.size(); i++) {
+            for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()){
+                    billList.add(bills1.get(i));
+                    break;
+                }
+            }
+        }
+        List<Bill> billList1 = new ArrayList<>();
+        for (int i = 0; i < billList.size(); i++) {
+            if (billList.get(i).getBillStatus().getId()==id){
+                billList1.add(billList.get(i));
+            }
+        }
+
+        return new ResponseEntity<>(billList1, HttpStatus.OK);
+    }
+
+    @PostMapping("/createbill")
+    public ResponseEntity<?> searchbill(@RequestBody BillDTO billDTO) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Product> products1 = new ArrayList<>();
-//        thêm các sp từ id truyen vao
-        for (int i = 0; i < p.size(); i++) {
-            products1.add(iProductRepoS.findProductById(p.get(i).getId()));
+        Bill bills = new Bill();
+        //thêm các sp từ id truyen vao
+        for (int i = 0; i < billDTO.getProductBillDTOS().size(); i++) {
+            products1.add(iProductRepoS.findProductById(billDTO.getProductBillDTOS().get(i).getIdproduct()));
         }
         List<Product> products = new ArrayList<>();
         List<Shop> shops1 = new ArrayList<>();
@@ -93,25 +118,36 @@ public class OrderAPI {
                 }
             }
         }
+        double totalprice = 0;
         //tạo bill cho các sp của từng shop
         for (int i = 0; i < shops1.size(); i++) {
+            //them sp của từng shop vào
             for (int j = 0; j < products1.size(); j++) {
                 if (shops1.get(i).getId() == products1.get(j).getShop().getId()) {
                     products.add(products1.get(j));
                 }
             }
-            bill.setProduct(products);
-            bill.setAccount(account);
-            bill.setDate(dateTime);
+            for (int j = 0; j < products.size(); j++) {
+                for (int k = 0; k < billDTO.getProductBillDTOS().size(); k++) {
+                    if(products.get(j).getId()==billDTO.getProductBillDTOS().get(k).getIdproduct()){
+                        totalprice+= products.get(j).getPrice()*billDTO.getProductBillDTOS().get(k).getAmount();
+                    }
+                }
+            }
+            bills.setProduct(products);
+            bills.setAccount(account);
+            bills.setDate(dateTime);
             BillStatus billStatus =new BillStatus();
-            billStatus.setId(1);
-            billStatus.setName("Chờ xác nhận");
-            bill.setBillStatus(billStatus);
-            iBillRepoM.save(bill);
+            billStatus.setId(6);
+            billStatus.setName("Bill ảo");
+            bills.setBillStatus(billStatus);
+            bills.setTotalprice(totalprice);
+            iBillRepoM.save(bills);
             products = new ArrayList<>();
-            bill=new Bill();
+            bills=new Bill();
+            totalprice = 0;
         }
-            return new ResponseEntity<>("Tạo bill thành công", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(billDTO.getProductBillDTOS(), HttpStatus.BAD_REQUEST);
         }
 
 
