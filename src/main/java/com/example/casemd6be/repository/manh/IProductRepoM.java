@@ -1,5 +1,6 @@
 package com.example.casemd6be.repository.manh;
 
+import com.example.casemd6be.model.Category;
 import com.example.casemd6be.model.Product;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -22,6 +23,7 @@ public interface IProductRepoM extends PagingAndSortingRepository<Product,Long> 
 
     @Query(nativeQuery = true, value = "SELECT * FROM product ")
     List<Product> findAllP();
+
 
 
     @Query(nativeQuery = true,value = "SELECT * FROM product WHERE name LIKE concat('%',:name,'%') AND category_id = :category_id")

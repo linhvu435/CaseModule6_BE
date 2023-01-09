@@ -1,7 +1,7 @@
 package com.example.casemd6be.config;
 
 import com.example.casemd6be.config.filter.JwtAuthenticationFilter;
-import com.example.casemd6be.service.AccountService;
+import com.example.casemd6be.service.impl.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
-    AccountService accountService;
+    AccountServiceImpl accountService;
 
     @Autowired
     JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/**");
 
-        http.authorizeRequests().antMatchers( "/login/**", "/register/**","/search/**","/products/**","/admin/**").permitAll();
+        http.authorizeRequests().antMatchers( "/login/**", "/register","/search/**","/products/**","/admin/**","/order/**").permitAll();
         http.authorizeRequests().antMatchers( "/login", "/registers/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable();
