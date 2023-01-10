@@ -23,4 +23,12 @@ public class AdminAPI_User {
         return new ResponseEntity<>(accounts1, HttpStatus.OK);
     }
 
+    @PostMapping("update/{id}&&{idstt}")
+    public ResponseEntity<?> updaStatus(@PathVariable("id") Long id,@PathVariable("idstt") Long idstt) {
+        Account accounts1 = iAccountRepo.findByIdUsername(id);
+        accounts1.setStatus(idstt);
+        iAccountRepo.save(accounts1);
+        return new ResponseEntity<>(accounts1, HttpStatus.OK);
+    }
+
 }
