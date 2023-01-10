@@ -5,6 +5,7 @@ import com.example.casemd6be.model.Roles;
 import com.example.casemd6be.repository.sang.AccountRepo;
 import com.example.casemd6be.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +29,7 @@ public class AccountServiceImpl implements IAccountService {
         List<Roles> roles = new ArrayList<>();
         roles.add(account.getRoles());
         if (account != null) {
-            return new User(account.getUsername(), account.getPassword(), roles);
+            return new User(account.getUsername(), account.getPassword(), (Collection<? extends GrantedAuthority>) roles);
         }
         return null;
     }
@@ -103,4 +105,5 @@ public class AccountServiceImpl implements IAccountService {
     public Account findbyEmail(String email){
         return accountRepo.findbyEmail(email);
     }
+
 }

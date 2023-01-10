@@ -1,6 +1,5 @@
 package com.example.casemd6be.repository.manh;
 
-import com.example.casemd6be.model.Category;
 import com.example.casemd6be.model.Product;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;

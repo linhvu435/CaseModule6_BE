@@ -3,13 +3,12 @@ package com.example.casemd6be.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Data
-public class Bill {
+    public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,4 +26,5 @@ public class Bill {
 
     @ManyToOne
     private Account account;
+
 }

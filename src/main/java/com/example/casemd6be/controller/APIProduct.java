@@ -6,23 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/products")
 public class APIProduct {
     @Autowired
     ProductService productService;
-    @GetMapping
-    public Iterable<Product> getAll(){
-        return productService.getAll();
+    @GetMapping("{id}")
+    public Iterable<Product> getAllByShopId(@PathVariable long id){
+        return productService.getProductByShopId(id);
     }
+    @GetMapping
+        public Iterable<Product> getAll(){
+            return productService.getAll();
+        }
     @PostMapping
     public ResponseEntity<Product> create(@RequestBody Product product){
         productService.save(product);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         productService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

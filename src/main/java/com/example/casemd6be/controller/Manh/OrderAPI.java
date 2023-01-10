@@ -1,8 +1,7 @@
 package com.example.casemd6be.controller.Manh;
 
 import com.example.casemd6be.model.*;
-import com.example.casemd6be.model.DTO.BillDTO;
-import com.example.casemd6be.model.DTO.ProductBillDTO;
+import com.example.casemd6be.model.dto.BillDTO;
 import com.example.casemd6be.repository.manh.IBillRepoM;
 import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
