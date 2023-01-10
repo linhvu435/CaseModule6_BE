@@ -1,11 +1,14 @@
 package com.example.casemd6be.controller.Manh;
 
 import com.example.casemd6be.model.*;
-import com.example.casemd6be.model.dto.BillDTO;
+
+import com.example.casemd6be.model.DTO.BillDTO;
 import com.example.casemd6be.repository.manh.IBillRepoM;
 import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.manh.IShopRepoM;
+import com.example.casemd6be.model.DTO.ProductInBillDTO;
+import com.example.casemd6be.repository.manh.*;
 import com.example.casemd6be.repository.son.IAccountRepoS;
 import com.example.casemd6be.repository.son.IProductRepoS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,11 @@ public class OrderAPI {
     private IBillStatusM iBillStatusM;
     @Autowired
     private IBillRepoM iBillRepoM;
+    @Autowired
+    private ICategoryM iCategoryM;
+
+    @Autowired
+    private IImgProductRepo iImgProductRepo;
 
     @GetMapping("/getallp")
     public ResponseEntity<List<Product>> getallPByShop() {
@@ -50,7 +57,13 @@ public class OrderAPI {
 
     @GetMapping("/getallbillstatus")
     public ResponseEntity<List<BillStatus>> getallbillstatus() {
-        return new ResponseEntity<>(iBillStatusM.findAllBillStatus(), HttpStatus.OK);
+        List<BillStatus> billStatuses =iBillStatusM.findAllBillStatus();
+        for (int i = 0; i < billStatuses.size(); i++) {
+            if (billStatuses.get(i).getId()==6){
+                billStatuses.remove(billStatuses.get(i));
+            }
+        }
+        return new ResponseEntity<>(billStatuses, HttpStatus.OK);
     }
 
     @GetMapping("/showBillShop")
@@ -61,13 +74,47 @@ public class OrderAPI {
         List<Bill> billList=new ArrayList<>();
         for (int i = 0; i < bills1.size(); i++) {
             for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
-                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()){
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()&&bills1.get(i).getBillStatus().getId()!=6){
                     billList.add(bills1.get(i));
                     break;
                 }
             }
         }
         return new ResponseEntity<>(billList, HttpStatus.OK);
+    }
+
+    @GetMapping("/showBillShopbyidbill/{id}")
+    public ResponseEntity<?> showbilldetailbyidbill(@PathVariable long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
+        List<Bill> bills1 = iBillRepoM.findAllB();
+        List<Bill> billList=new ArrayList<>();
+        for (int i = 0; i < bills1.size(); i++) {
+            for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()&&bills1.get(i).getBillStatus().getId()!=6){
+                    billList.add(bills1.get(i));
+                    break;
+                }
+            }
+        }
+        Bill bill =new Bill();
+        for (int i = 0; i < billList.size(); i++) {
+            if (billList.get(i).getId()==id){
+                bill=billList.get(i);
+            }
+        }
+        List<Product> products = new ArrayList<>();
+        for (int i = 0; i < bill.getProduct().size(); i++) {
+            products.add(bill.getProduct().get(i));
+        }
+        List<ProductInBillDTO> productInBillDTOList =new ArrayList<>();
+        ProductInBillDTO productInBillDTO ;
+        for (int i = 0; i < products.size(); i++) {
+            List<ImgProduct> imgProducts = iImgProductRepo.findAllImgByProduct(products.get(i).getId());
+            productInBillDTO=new ProductInBillDTO(products.get(i).getId(),products.get(i).getName(),products.get(i).getPrice(),imgProducts.get(0).getName());
+            productInBillDTOList.add(productInBillDTO);
+        }
+        return new ResponseEntity<>(productInBillDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/showBillShop/{id}")
@@ -151,7 +198,7 @@ public class OrderAPI {
 
 
 
-    @PostMapping("/setbill/{idbill}/{idstatus}")
+    @GetMapping("/setbill/{idbill}/{idstatus}")
     public ResponseEntity<Bill> setbill(@PathVariable long idbill,@PathVariable long idstatus) {
         Bill bill = iBillRepoM.findBillById(idbill);
         BillStatus billStatus = iBillStatusM.findBillStatusById(idstatus);

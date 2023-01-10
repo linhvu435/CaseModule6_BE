@@ -1,4 +1,4 @@
-package com.example.casemd6be.model.dto;
+package com.example.casemd6be.model.DTO;
 
 import lombok.Data;
 

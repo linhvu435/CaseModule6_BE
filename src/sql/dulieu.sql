@@ -53,10 +53,19 @@ INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_
 INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('2', 'k có mô tả', 'Máy bay chiến đấu', '1000000', '4', '2');
 INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('5', 'hàng vip', 'Nồi đồng cối đá', '200000', '3', '2');
 
+-- imgproduct
+INSERT INTO `casemd6`.`img_product` (`id`, `name`, `product_id`) VALUES ('1', 'https://static.tuoitre.vn/tto/i/s626/2016/10/24/nhat-0-1477284911.jpg', '1');
+INSERT INTO `casemd6`.`img_product` (`id`, `name`, `product_id`) VALUES ('2', 'https://i.pinimg.com/originals/25/66/a4/2566a4b00777931baecd953abf9a7e83.jpg', '2');
+INSERT INTO `casemd6`.`img_product` (`id`, `name`, `product_id`) VALUES ('3', 'https://i.chungta.vn/2022/11/14/DSC-0891-1668398115_1200x0.jpg', '3');
+INSERT INTO `casemd6`.`img_product` (`id`, `name`, `product_id`) VALUES ('4', 'https://amia.vn/wp-content/uploads/2020/08/hinh-anh-thuc-te-mau-tranh-kho-lon-canh-lau-dai-osaka-noi-tieng-amia-1619-lam-theo-yeu-cau.jpg', '4');
+INSERT INTO `casemd6`.`img_product` (`id`, `name`, `product_id`) VALUES ('5', 'https://i0.wp.com/menet.vn/wp-content/uploads/2021/05/1.jpg?fit=815%2C459', '5');
+INSERT INTO `casemd6`.`img_product` (`id`, `name`, `product_id`) VALUES ('6', 'https://toigingiuvedep.vn/wp-content/uploads/2021/07/hinh-anh-nhat-ban-hoa-anh-dao-dep-me-hon.jpg', '6');
+
 -- billstatus
 INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('1', 'Chờ xác nhận');
 INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('2', 'Đang giao hàng');
 INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('3', 'Đã nhận được hàng');
-INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('4', 'Hủy đơn hàng');
-INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('5', 'Đánh giá');
+INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('4', 'Đánh giá');
+INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('5', 'Đã hủy');
+INSERT INTO `casemd6`.`bill_status` (`id`, `name`) VALUES ('6', 'Bill ảo');
 
