@@ -34,7 +34,14 @@ public class OrderUserAPI {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Bill> bills1 = iBillRepoM.findAllBbyIdAccount(account.getId());
-        return new ResponseEntity<>(bills1, HttpStatus.OK);
+        List<Bill> billList = new ArrayList<>();
+        //check bill của account có trạng thái khác 6
+        for (int i = 0; i < bills1.size(); i++) {
+            if (bills1.get(i).getBillStatus().getId() != 6) {
+                billList.add(bills1.get(i));
+            }
+        };
+        return new ResponseEntity<>(billList, HttpStatus.OK);
     }
 
     @GetMapping("/showBillShopbyidbill/{id}")
@@ -76,17 +83,11 @@ public class OrderUserAPI {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Bill> bills1 = iBillRepoM.findAllBbyIdAccount(account.getId());
-        List<Bill> billList = new ArrayList<>();
-        //check bill của account có trạng thái khác 6
-        for (int i = 0; i < bills1.size(); i++) {
-            if (bills1.get(i).getBillStatus().getId() != 6) {
-                billList.add(bills1.get(i));
-            }
-        }
+
         List<Bill> billList1 = new ArrayList<>();
-        for (int i = 0; i < billList.size(); i++) {
-            if (billList.get(i).getBillStatus().getId()==id){
-                billList1.add(billList.get(i));
+        for (int i = 0; i < bills1.size(); i++) {
+            if (bills1.get(i).getBillStatus().getId()==id){
+                billList1.add(bills1.get(i));
             }
         }
         return new ResponseEntity<>(billList1, HttpStatus.OK);
