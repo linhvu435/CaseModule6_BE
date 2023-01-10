@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("admin/User")
+@RequestMapping("/admin/User")
 public class AdminAPI_User {
     @Autowired
     IAccountRepoS iAccountRepo;
@@ -23,7 +23,7 @@ public class AdminAPI_User {
         return new ResponseEntity<>(accounts1, HttpStatus.OK);
     }
 
-    @PostMapping("update/{id}&&{idstt}")
+    @GetMapping("/update/{id}/{idstt}")
     public ResponseEntity<?> updaStatus(@PathVariable("id") Long id,@PathVariable("idstt") Long idstt) {
         Account accounts1 = iAccountRepo.findByIdUsername(id);
         accounts1.setStatus(idstt);
