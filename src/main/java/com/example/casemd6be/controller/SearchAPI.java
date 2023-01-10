@@ -1,11 +1,10 @@
 package com.example.casemd6be.controller;
 
 import com.example.casemd6be.model.Product;
-import com.example.casemd6be.repository.IAccountRepo;
-import com.example.casemd6be.repository.manh.IProductRepo;
-import com.example.casemd6be.repository.manh.IShopRepo;
-import com.example.casemd6be.repository.manh.ITrademarkRepo;
+import com.example.casemd6be.repository.linh.IShopRepo;
 import com.example.casemd6be.repository.manh.ICategoryM;
+import com.example.casemd6be.repository.manh.IProductRepoM;
+import com.example.casemd6be.repository.manh.ITrademarkRepoM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +19,15 @@ import java.util.List;
 
 public class SearchAPI {
     @Autowired
-    private IProductRepo iProductRepo;
+    private IProductRepoM iProductRepoM;
 
     @Autowired
     private IShopRepo iShopRepo;
+    @Autowired
     ICategoryM iCategoryM;
 
     @Autowired
-    private ITrademarkRepo iTrademarkRepo;
+    private ITrademarkRepoM iTrademarkRepo;
 
     @GetMapping("/getallcategory")
     public ResponseEntity<?> getallcategory() {
@@ -35,23 +35,23 @@ public class SearchAPI {
     }
     @GetMapping("/{name}")
     public ResponseEntity<List<Product>> findByName(@PathVariable String name) {
-        return new ResponseEntity<>(iProductRepo.findByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(iProductRepoM.findByName(name), HttpStatus.OK);
     }
 
     @GetMapping("/searchcategory/{category_id}")
     public ResponseEntity<List<Product>> findByCategory(@PathVariable long category_id) {
-        List<Product> products = iProductRepo.findProductByCategory_Id(category_id);
+        List<Product> products = iProductRepoM.findProductByCategory_Id(category_id);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @GetMapping("/searchcategoryandname/{name}/{category_id}")
     public ResponseEntity<List<Product>> findByCategoryAndName(@PathVariable long category_id, @PathVariable String name) {
-        return new ResponseEntity<>(iProductRepo.findProductByCategory_IdAndName(name, category_id), HttpStatus.OK);
+        return new ResponseEntity<>(iProductRepoM.findProductByCategory_IdAndName(name, category_id), HttpStatus.OK);
     }
 
     @GetMapping("/searchprice/{pricemin}/{pricemax}")
     public ResponseEntity<List<Product>> findByCategory(@PathVariable double pricemin, @PathVariable double pricemax) {
-        List<Product> products = iProductRepo.findAllP();
+        List<Product> products = iProductRepoM.findAllP();
         List<Product> productList = new ArrayList<>();
         if (pricemin < pricemax) {
             for (int i = 0; i < products.size(); i++) {
@@ -67,7 +67,7 @@ public class SearchAPI {
 
     @GetMapping("/searchpriceandname/{pricemin}/{pricemax}/{name}")
     public ResponseEntity<List<Product>> findByCategory(@PathVariable double pricemin, @PathVariable double pricemax,@PathVariable String name) {
-        List<Product> products = iProductRepo.findByName(name);
+        List<Product> products = iProductRepoM.findByName(name);
         List<Product> productList = new ArrayList<>();
         if (pricemin < pricemax) {
             for (int i = 0; i < products.size(); i++) {
@@ -84,9 +84,9 @@ public class SearchAPI {
 
     @GetMapping("/searchpriceandcategory/{pricemin}/{pricemax}/{category_id}")
     public ResponseEntity<List<Product>> findByCategory(@PathVariable double pricemin, @PathVariable double pricemax, @PathVariable long category_id) {
-        List<Product> products = iProductRepo.findAllP();
+        List<Product> products = iProductRepoM.findAllP();
         List<Product> productList = new ArrayList<>();
-        List<Product> products1 = iProductRepo.findProductByCategory_Id(category_id);
+        List<Product> products1 = iProductRepoM.findProductByCategory_Id(category_id);
         if (pricemin < pricemax) {
             for (int i = 0; i < products.size(); i++) {
                 if (products.get(i).getPrice() <= pricemax && products.get(i).getPrice() >= pricemin) {
@@ -105,9 +105,9 @@ public class SearchAPI {
 
     @GetMapping("/searchpriceandcategoryandname/{pricemin}/{pricemax}/{category_id}/{name}")
     public ResponseEntity<List<Product>> findByCategory(@PathVariable double pricemin, @PathVariable double pricemax, @PathVariable long category_id,@PathVariable String name) {
-        List<Product> products = iProductRepo.findProductByCategory_IdAndName(name, category_id);
+        List<Product> products = iProductRepoM.findProductByCategory_IdAndName(name, category_id);
         List<Product> products2 = new ArrayList<>();
-        List<Product> products1 = iProductRepo.findProductByCategory_Id(category_id);
+        List<Product> products1 = iProductRepoM.findProductByCategory_Id(category_id);
         if (pricemin < pricemax) {
             for (int i = 0; i < products.size(); i++) {
                 if (products.get(i).getPrice() <= pricemax && products.get(i).getPrice() >= pricemin) {
