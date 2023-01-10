@@ -1,12 +1,15 @@
 package com.example.casemd6be.controller.Admin;
 
 import com.example.casemd6be.model.Account;
+import com.example.casemd6be.model.Roles;
 import com.example.casemd6be.repository.son.IAccountRepoS;
+import com.example.casemd6be.repository.son.IRoloesRepoS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +18,9 @@ import java.util.Optional;
 public class AdminAPI {
     @Autowired
     IAccountRepoS iAccountRepo;
+
+    @Autowired
+    IRoloesRepoS iRoloesRepoS;
 
     @GetMapping("/showAccount/{id}")
     public ResponseEntity<Iterable<Account>> showAccountByRoles(@PathVariable("id") Long id) {
@@ -52,6 +58,14 @@ public class AdminAPI {
         return new ResponseEntity<>(accountEdit, HttpStatus.OK);
     }
 
+    @GetMapping("/showrole")
+    public ResponseEntity<Iterable<Roles>>showRole(){
+        Iterable<Roles> roles = iRoloesRepoS.findAll();
+        if (!roles.iterator().hasNext()) {
+            new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(roles, HttpStatus.OK);
+    }
 }
 
 
