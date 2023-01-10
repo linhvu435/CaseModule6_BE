@@ -15,7 +15,7 @@ public interface IBillRepoM extends PagingAndSortingRepository<Bill,Long> {
     List<Bill> findAllB();
 
     @Query(nativeQuery = true, value = "SELECT * FROM bill where account_id = :account_id")
-    List<Bill> findAllB(long account_id);
+    List<Bill> findAllBbyIdAccount(long account_id);
 
     @Query(nativeQuery = true, value = "SELECT * from bill join product on product.shop_id = :shop_id order by date desc")
     List<Bill> findAllByShop_IdDesc(long shop_id);
