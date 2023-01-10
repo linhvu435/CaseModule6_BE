@@ -43,6 +43,8 @@ public class SearchAPI {
     @GetMapping("/searchcategoryandname/{name}/{category_id}")
     public ResponseEntity<List<Product>> findByCategoryAndName(@PathVariable long category_id, @PathVariable String name) {
         return new ResponseEntity<>(iProductRepo.findProductByCategory_IdAndName(name, category_id), HttpStatus.OK);
+
+
     }
 
     @GetMapping("/searchprice/{pricemin}/{pricemax}")
