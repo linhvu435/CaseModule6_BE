@@ -19,6 +19,8 @@ public class Product {
     private Double price ;
     private long amount ;
 
+    private long amountsell;
+
     @ManyToOne(cascade=CascadeType.MERGE)
     private Category category;
 

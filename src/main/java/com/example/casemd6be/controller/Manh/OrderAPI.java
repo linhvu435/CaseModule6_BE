@@ -184,7 +184,7 @@ public class OrderAPI {
             bills.setAccount(account);
             bills.setDate(dateTime);
             BillStatus billStatus =new BillStatus();
-            billStatus.setId(6);
+            billStatus.setId(1);
             billStatus.setName("Bill ảo");
             bills.setBillStatus(billStatus);
             bills.setTotalprice(totalprice);

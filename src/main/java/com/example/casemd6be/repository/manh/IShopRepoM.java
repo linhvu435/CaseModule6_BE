@@ -17,6 +17,10 @@ public interface IShopRepoM extends PagingAndSortingRepository<Shop,Long> {
     @Query(nativeQuery = true,value = "SELECT * from shop where account_id =:account_id")
     Shop findShopByAccountId(long account_id);
 
-    @Query(nativeQuery = true,value = "SELECT * from shop")
+    @Query(nativeQuery = true,value = "SELECT * from shop ")
     List<Shop> findAllShop();
+
+    @Query(nativeQuery = true,value = "SELECT * from shop where id =:id")
+    List<Shop> findShopsById(long id);
+
 }
