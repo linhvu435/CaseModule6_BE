@@ -12,4 +12,7 @@ public class ShopService {
     public Shop findShopById(long id){
         return iShopRepo.findShopById(id);
     }
+    public Long findIdShopAddressByIdAccount(long id){
+        return iShopRepo.findIdShopAddressByIdAccount(id);
+    }
 }

@@ -58,10 +58,10 @@ public class OrderAPI {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Bill> bills1 = iBillRepoM.findAllB();
-        List<Bill> billList=new ArrayList<>();
+        List<Bill> billList = new ArrayList<>();
         for (int i = 0; i < bills1.size(); i++) {
             for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
-                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()){
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId() == account.getId()) {
                     billList.add(bills1.get(i));
                     break;
                 }
@@ -71,14 +71,14 @@ public class OrderAPI {
     }
 
     @GetMapping("/showBillShop/{id}")
-    public ResponseEntity<?> showbillshopbystatus( @PathVariable long id) {
+    public ResponseEntity<?> showbillshopbystatus(@PathVariable long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Bill> bills1 = iBillRepoM.findAllB();
-        List<Bill> billList=new ArrayList<>();
+        List<Bill> billList = new ArrayList<>();
         for (int i = 0; i < bills1.size(); i++) {
             for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
-                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()){
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId() == account.getId()) {
                     billList.add(bills1.get(i));
                     break;
                 }
@@ -86,7 +86,7 @@ public class OrderAPI {
         }
         List<Bill> billList1 = new ArrayList<>();
         for (int i = 0; i < billList.size(); i++) {
-            if (billList.get(i).getBillStatus().getId()==id){
+            if (billList.get(i).getBillStatus().getId() == id) {
                 billList1.add(billList.get(i));
             }
         }
@@ -118,6 +118,7 @@ public class OrderAPI {
             }
         }
         double totalprice = 0;
+        List<Bill> toSaveList = new ArrayList<>();
         //tạo bill cho các sp của từng shop
         for (int i = 0; i < shops1.size(); i++) {
             //them sp của từng shop vào
@@ -128,31 +129,32 @@ public class OrderAPI {
             }
             for (int j = 0; j < products.size(); j++) {
                 for (int k = 0; k < billDTO.getProductBillDTOS().size(); k++) {
-                    if(products.get(j).getId()==billDTO.getProductBillDTOS().get(k).getIdproduct()){
-                        totalprice+= products.get(j).getPrice()*billDTO.getProductBillDTOS().get(k).getAmount();
+                    if (products.get(j).getId() == billDTO.getProductBillDTOS().get(k).getIdproduct()) {
+                        totalprice += products.get(j).getPrice() * billDTO.getProductBillDTOS().get(k).getAmount();
                     }
                 }
             }
             bills.setProduct(products);
             bills.setAccount(account);
             bills.setDate(dateTime);
-            BillStatus billStatus =new BillStatus();
+            BillStatus billStatus = new BillStatus();
             billStatus.setId(6);
             billStatus.setName("Bill ảo");
             bills.setBillStatus(billStatus);
             bills.setTotalprice(totalprice);
-            iBillRepoM.save(bills);
+            toSaveList.add(bills);
+//            iBillRepoM.save(bills);
             products = new ArrayList<>();
-            bills=new Bill();
+            bills = new Bill();
             totalprice = 0;
         }
-            return new ResponseEntity<>(billDTO.getProductBillDTOS(), HttpStatus.BAD_REQUEST);
-        }
-
+        List<Bill> saved = (List<Bill>)  iBillRepoM.saveAll(toSaveList);
+        return ResponseEntity.ok(saved);
+    }
 
 
     @PostMapping("/setbill/{idbill}/{idstatus}")
-    public ResponseEntity<Bill> setbill(@PathVariable long idbill,@PathVariable long idstatus) {
+    public ResponseEntity<Bill> setbill(@PathVariable long idbill, @PathVariable long idstatus) {
         Bill bill = iBillRepoM.findBillById(idbill);
         BillStatus billStatus = iBillStatusM.findBillStatusById(idstatus);
         bill.setBillStatus(billStatus);
