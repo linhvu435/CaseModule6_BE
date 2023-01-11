@@ -1,28 +1,19 @@
 package com.example.casemd6be.model.DTO;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class BillDTO extends ProductBillDTO {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class BillDTO implements Serializable {
     List<ProductBillDTO> productBillDTOS;
 
-    public BillDTO(List<ProductBillDTO> productBillDTOS) {
-        this.productBillDTOS = productBillDTOS;
-    }
-
-    public BillDTO(long idproduct, long amount, List<ProductBillDTO> productBillDTOS) {
-        super(idproduct, amount);
-        this.productBillDTOS = productBillDTOS;
-    }
-
-    public BillDTO() {
-    }
-
-    public List<ProductBillDTO> getProductBillDTOS() {
-        return productBillDTOS;
-    }
-
-    public void setProductBillDTOS(List<ProductBillDTO> productBillDTOS) {
-        this.productBillDTOS = productBillDTOS;
-    }
 }
