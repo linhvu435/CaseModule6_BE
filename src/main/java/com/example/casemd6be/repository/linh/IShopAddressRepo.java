@@ -7,4 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface IShopAddressRepo extends PagingAndSortingRepository<ShopAddress,Long> {
     @Query(nativeQuery = true,value = "SELECT name from shop_address where id = :id")
     String findShopAddressNameByShopId(long id);
+
+
 }

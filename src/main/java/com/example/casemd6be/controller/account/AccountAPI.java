@@ -3,6 +3,7 @@ package com.example.casemd6be.controller.account;
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.JwtResponse;
 import com.example.casemd6be.model.Roles;
+import com.example.casemd6be.model.Shop;
 import com.example.casemd6be.repository.linh.IShopRepo;
 import com.example.casemd6be.repository.sang.AccountRepo;
 import com.example.casemd6be.service.JwtService;
@@ -112,11 +113,18 @@ public class AccountAPI {
         String jwt = jwtService.createToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account currentUser = accountService.findByUsername(account.getUsername());
-        long idShopAddress = shopService.findIdShopAddressByIdAccount(currentUser.getId());
-        return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),shopAddressService.findShopAdressName(idShopAddress),
-                currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        Shop idShopAddress = shopService.findshopbyidaccount(currentUser.getId());
+        if (idShopAddress!= null) {
+            return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),idShopAddress.getName(),
+                    currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        }else {
+            return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),"Chưa đăng kí dịch vụ bán hàng!",
+                    currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        }
     }
+
 
     @GetMapping("/users/{id}")
     public ResponseEntity<Account> getProfile(@PathVariable Long id) {
