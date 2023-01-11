@@ -46,12 +46,12 @@ INSERT INTO `casemd6`.`shop` ( `img`, `name`, `status`, `account_id`,`shop_addre
 INSERT INTO `casemd6`.`shop` ( `img`, `name`, `status`, `account_id`,`shop_address_id`) VALUES ( 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH1Ht9PM0Un5K1l4PGXm17jDgEbF9fOVe9ew&usqp=CAU', 'shoplinlinh', '1', '6','1');
 
 -- product
-INSERT INTO `casemd6`.`product` (`id`, `amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('1', '3', 'sp hay', 'áo gucci rep 1:1', '129000', '1', '1');
-INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('2', 'vip', 'sịp lọt khe', '50000', '1', '1');
-INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('3', 'ok', 'B41', '5000000', '4', '2');
-INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('4', 'tạm được', 'Áo nike', '26000', '1', '1');
-INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('2', 'k có mô tả', 'Máy bay chiến đấu', '1000000', '4', '2');
-INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`) VALUES ('5', 'hàng vip', 'Nồi đồng cối đá', '200000', '3', '2');
+INSERT INTO `casemd6`.`product` (`id`, `amount`, `detail`, `name`, `price`, `category_id`, `shop_id`,`amountsell`) VALUES ('1', '3', 'sp hay', 'áo gucci rep 1:1', '129000', '1', '1','2');
+INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`,`amountsell`) VALUES ('2', 'vip', 'sịp lọt khe', '50000', '1', '1','2');
+INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`,`amountsell`) VALUES ('3', 'ok', 'B41', '5000000', '4', '2','2');
+INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`,`amountsell`) VALUES ('4', 'tạm được', 'Áo nike', '26000', '1', '1','2');
+INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`,`amountsell`) VALUES ('2', 'k có mô tả', 'Máy bay chiến đấu', '1000000', '4', '2','2');
+INSERT INTO `casemd6`.`product` (`amount`, `detail`, `name`, `price`, `category_id`, `shop_id`,`amountsell`) VALUES ('5', 'hàng vip', 'Nồi đồng cối đá', '200000', '3', '2','2');
 
 -- imgproduct
 INSERT INTO `casemd6`.`img_product` (`id`, `name`, `product_id`) VALUES ('1', 'https://static.tuoitre.vn/tto/i/s626/2016/10/24/nhat-0-1477284911.jpg', '1');
