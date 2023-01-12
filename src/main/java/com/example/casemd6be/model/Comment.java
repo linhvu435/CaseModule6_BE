@@ -14,7 +14,7 @@ public class Comment {
 
     private String cmt;
 
-
+    private long star;
     @ManyToOne
     private Product product;
 

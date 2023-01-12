@@ -43,7 +43,7 @@ public class OrderAPI {
     private ICategoryM iCategoryM;
 
     @Autowired
-    private IImgProductRepo iImgProductRepo;
+    private IImgProductRepoM iImgProductRepo;
 
     @GetMapping("/getallp")
     public ResponseEntity<List<Product>> getallPByShop() {

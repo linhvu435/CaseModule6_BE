@@ -113,15 +113,14 @@ public class AccountAPI {
         String jwt = jwtService.createToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account currentUser = accountService.findByUsername(account.getUsername());
-        long idShopAddress = shopService.findIdShopAddressByIdAccount(currentUser.getId());
-        if (idShopAddress >0){
+        Shop idShopAddress = shopService.findshopbyidaccount(currentUser.getId());
+        if (idShopAddress!= null) {
             return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),shopAddressService.findShopAdressName(idShopAddress),
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),idShopAddress.getName(),
                     currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
-        }
-        else {
+        }else {
             return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),"Chưa đăng kí dịch vụ bán hàng!",
                     currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
         }
     }

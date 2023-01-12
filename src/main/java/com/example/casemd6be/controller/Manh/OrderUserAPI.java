@@ -7,7 +7,7 @@ import com.example.casemd6be.model.ImgProduct;
 import com.example.casemd6be.model.Product;
 import com.example.casemd6be.repository.IAccountRepo;
 import com.example.casemd6be.repository.manh.IBillRepoM;
-import com.example.casemd6be.repository.manh.IImgProductRepo;
+import com.example.casemd6be.repository.manh.IImgProductRepoM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class OrderUserAPI {
     IBillRepoM iBillRepoM;
 
     @Autowired
-    private IImgProductRepo iImgProductRepo;
+    private IImgProductRepoM iImgProductRepo;
     @GetMapping("/showBillShop")
     public ResponseEntity<?> showBillShopByAccount() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

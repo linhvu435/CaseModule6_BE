@@ -1,14 +1,18 @@
 package com.example.casemd6be.controller.Manh;
 
+import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.Bill;
 import com.example.casemd6be.model.DTO.ShopDetailDTO;
 import com.example.casemd6be.model.Product;
 import com.example.casemd6be.model.Shop;
+import com.example.casemd6be.repository.IAccountRepo;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.manh.IShopRepoM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +31,8 @@ public class ProductAPI {
     IProductRepoM iProductRepoM;
     @Autowired
     private IShopRepoM iShopRepoM;
+    @Autowired
+    private IAccountRepo iAccountRepo;
 
     @GetMapping("/getnewproduct")
     public ResponseEntity<?> getall() {
@@ -73,5 +79,4 @@ public class ProductAPI {
         Collections.sort(shopDetailDTOS1,new Soft());
         return new ResponseEntity<>(shopDetailDTOS1, HttpStatus.OK);
     }
-
-    }
+}

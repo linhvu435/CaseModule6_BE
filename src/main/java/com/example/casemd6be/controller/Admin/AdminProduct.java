@@ -1,11 +1,9 @@
 package com.example.casemd6be.controller.Admin;
 
-import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.DTO.ProductDTO;
-import com.example.casemd6be.model.DTO.ProductInBillDTO;
 import com.example.casemd6be.model.ImgProduct;
 import com.example.casemd6be.model.Product;
-import com.example.casemd6be.repository.manh.IImgProductRepo;
+import com.example.casemd6be.repository.manh.IImgProductRepoM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.son.IProductRepoS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ public class AdminProduct {
     @Autowired
     private IProductRepoM iProductRepoM;
     @Autowired
-    private IImgProductRepo iImgProductRepo;
+    private IImgProductRepoM iImgProductRepo;
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAll(){
         List<Product> products =  iProductRepoM.findAllP();
