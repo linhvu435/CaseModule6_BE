@@ -45,6 +45,20 @@ public class JwtResponse {
         this.roles = roles;
     }
 
+    public JwtResponse(Long id, String token, String username, String email, String img, String phoneNumber, String address, String gender, LocalDate date, LocalDate birthday, Collection<? extends GrantedAuthority> roles) {
+        this.id = id;
+        this.token = token;
+        this.username = username;
+        this.email = email;
+        this.img = img;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.gender = gender;
+        this.date = date;
+        this.birthday = birthday;
+        this.roles = roles;
+    }
+
     public String getAddress() {
         return address;
     }
