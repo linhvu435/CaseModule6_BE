@@ -15,21 +15,21 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(unique = true, nullable = false)
-    @NotBlank(message = "user name không được để trống")
+//    @Column(unique = true, nullable = false)
+//    @NotBlank(message = "user name không được để trống")
     private String username;
 
-    @Column(unique = true, nullable = false)
-    @Email
-    @NotBlank(message = "email không để trống")
+//    @Column(unique = true, nullable = false)
+//    @Email
+//    @NotBlank(message = "email không để trống")
     private String email;
 
-    @Column(nullable = false)
-    @NotBlank(message = "password không được để trống")
+//    @Column(nullable = false)
+//    @NotBlank(message = "password không được để trống")
     private String password;
 
-    @Column(nullable = false)
-    @NotBlank(message = "số điện thoại không được để trống")
+//    @Column(nullable = false)
+//    @NotBlank(message = "số điện thoại không được để trống")
     private String phoneNumber;
     private String name;
 
@@ -38,8 +38,8 @@ public class Account {
     private LocalDate birthday;
     private LocalDate date;
 
-    @Column(nullable = false)
-    @NotBlank(message = "địa chỉ không được để trống")
+//    @Column(nullable = false)
+//    @NotBlank(message = "địa chỉ không được để trống")
     private String address;
     private String gender;
     private String img;

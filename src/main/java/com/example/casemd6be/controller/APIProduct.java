@@ -20,6 +20,7 @@ public class APIProduct {
         public Iterable<Product> getAll(){
             return productService.getAll();
         }
+
     @PostMapping
     public ResponseEntity<Product> create(@RequestBody Product product){
         productService.save(product);

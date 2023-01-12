@@ -54,6 +54,7 @@ public class AdminAPI {
     public ResponseEntity<Account> update(@RequestBody Account accountEdit, @PathVariable("id") Long id) {
         Optional<Account> accounts = iAccountRepo.findById(id);
     accountEdit.setId(accounts.get().getId());
+    accountEdit.setPassword(accounts.get().getPassword());
     accountEdit =iAccountRepo.save(accountEdit);
         return new ResponseEntity<>(accountEdit, HttpStatus.OK);
     }
