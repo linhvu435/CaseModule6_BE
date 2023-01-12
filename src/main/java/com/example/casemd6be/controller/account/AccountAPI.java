@@ -113,9 +113,16 @@ public class AccountAPI {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account currentUser = accountService.findByUsername(account.getUsername());
         long idShopAddress = shopService.findIdShopAddressByIdAccount(currentUser.getId());
-        return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),shopAddressService.findShopAdressName(idShopAddress),
-                currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        if (idShopAddress >0){
+            return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),shopAddressService.findShopAdressName(idShopAddress),
+                    currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        }
+       else {
+            return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),
+                    currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        }
     }
 
     @GetMapping("/users/{id}")

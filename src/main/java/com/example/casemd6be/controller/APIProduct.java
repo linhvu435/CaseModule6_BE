@@ -16,6 +16,10 @@ public class APIProduct {
     public Iterable<Product> getAllByShopId(@PathVariable long id){
         return productService.getProductByShopId(id);
     }
+    @GetMapping("/findProductById/{id}")
+    public Product findProductById(@PathVariable long id){
+        return productService.findProductById(id);
+    }
     @GetMapping
         public Iterable<Product> getAll(){
             return productService.getAll();
@@ -42,4 +46,9 @@ public class APIProduct {
         productService.save(product);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
+    @GetMapping("/findIdProduct")
+    public Long getIdProduct(){
+        return productService.FindMaxIdProduct();
+    }
+
 }

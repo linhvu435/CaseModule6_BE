@@ -30,4 +30,12 @@ public class ProductService {
     public List<Product> getProductByShopId(long id){
         return iProductRepoM.findProductByShopId(id);
     }
+
+    public Long FindMaxIdProduct(){
+      return  iProductRepoM.FindMaxIdProduct();
+    }
+
+    public Product findProductById(long id){
+        return iProductRepoM.findById(id).get();
+    }
 }
