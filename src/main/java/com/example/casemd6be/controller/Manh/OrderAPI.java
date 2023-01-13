@@ -8,7 +8,7 @@ import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.manh.IShopRepoM;
 import com.example.casemd6be.model.DTO.ProductInBillDTO;
-import com.example.casemd6be.repository.manh.*;
+import com.example.casemd6be.repository .manh.*;
 import com.example.casemd6be.repository.son.IAccountRepoS;
 import com.example.casemd6be.repository.son.IProductRepoS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,14 +107,9 @@ public class OrderAPI {
         for (int i = 0; i < bill.getProduct().size(); i++) {
             products.add(bill.getProduct().get(i));
         }
-        List<ProductInBillDTO> productInBillDTOList =new ArrayList<>();
-        ProductInBillDTO productInBillDTO ;
-        for (int i = 0; i < products.size(); i++) {
-            List<ImgProduct> imgProducts = iImgProductRepo.findAllImgByProduct(products.get(i).getId());
-            productInBillDTO=new ProductInBillDTO(products.get(i).getId(),products.get(i).getName(),products.get(i).getPrice(),imgProducts.get(0).getName());
-            productInBillDTOList.add(productInBillDTO);
-        }
-        return new ResponseEntity<>(productInBillDTOList, HttpStatus.OK);
+
+        ProductInBillDTO productInBillDTO = new ProductInBillDTO(bill.getId(),bill.getAccount().getName(),products,bill.getTotalprice());
+        return new ResponseEntity<>(productInBillDTO, HttpStatus.OK);
     }
 
     @GetMapping("/showBillShop/{id}")
@@ -137,7 +132,6 @@ public class OrderAPI {
                 billList1.add(billList.get(i));
             }
         }
-
         return new ResponseEntity<>(billList1, HttpStatus.OK);
     }
 
