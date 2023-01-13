@@ -27,7 +27,8 @@ public class ProductService {
     public Product finByID(long id) {
         return iProductRepoM.findById(id).get();
     }
-    public List<Product> getProductByShopId(long id){
+
+    public List<Product> getProductByShopId(long id) {
         return iProductRepoM.findProductByShopId(id);
     }
 

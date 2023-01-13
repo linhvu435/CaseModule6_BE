@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/products")
@@ -50,6 +53,11 @@ public class APIProduct {
     @GetMapping("/findIdProduct")
     public Long getIdProduct(){
         return productService.FindMaxIdProduct();
+    }
+
+    @GetMapping("/showShopProduct/{id}")
+    public List<Product> getAllProductByIdShop(@PathVariable     long id){
+        return productService.getProductByShopId(id);
     }
 
 }
