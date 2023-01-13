@@ -201,7 +201,7 @@ public class OrderAPI {
     }
 
 
-    @PostMapping("/setbill/{idbill}/{idstatus}")
+    @GetMapping("/setbill/{idbill}/{idstatus}")
     public ResponseEntity<Bill> setbill(@PathVariable long idbill, @PathVariable long idstatus) {
         Bill bill = iBillRepoM.findBillById(idbill);
         BillStatus billStatus = iBillStatusM.findBillStatusById(idstatus);
