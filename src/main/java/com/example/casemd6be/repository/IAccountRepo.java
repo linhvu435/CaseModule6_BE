@@ -8,6 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface IAccountRepo extends CrudRepository<Account, Long> {
 
@@ -29,5 +31,7 @@ public interface IAccountRepo extends CrudRepository<Account, Long> {
 
     Account findAccountById(long id);
 
+    @Query(nativeQuery = true,value = "SELECT * from account where email = :email")
+    List<Account> findAccountByEmail(String email);
 
 }

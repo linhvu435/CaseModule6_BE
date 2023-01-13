@@ -41,11 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.csrf().ignoringAntMatchers("/**");
 
 
-        http.authorizeRequests().antMatchers( "/login/**", "/register/**","/search/**","/products/**","/admin/**","/shop/**","/category/**","/imgProduct**").permitAll();
-
-        http.authorizeRequests().antMatchers( "/login/**", "/register","/search/**","/products/**","/admin/**","/order/**").permitAll();
-
-        http.authorizeRequests().antMatchers( "/login", "/registers/**").permitAll()
+        http.authorizeRequests().antMatchers( "/login", "/registers/**","/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

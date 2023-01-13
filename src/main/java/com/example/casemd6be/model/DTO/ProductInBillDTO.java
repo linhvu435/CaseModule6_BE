@@ -1,47 +1,25 @@
 package com.example.casemd6be.model.DTO;
 
+import com.example.casemd6be.model.Product;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@Getter
+@Setter
 public class ProductInBillDTO {
     long id;
-String name;
-Double price;
-String img;
+    String name;
 
-    public ProductInBillDTO(long id, String name, Double price, String img) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.img = img;
-    }
+    List<Product> products ;
+    Double total;
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
 }
