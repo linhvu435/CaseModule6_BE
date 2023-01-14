@@ -1,6 +1,6 @@
-package com.example.casemd6be.model.DTO;
+package com.example.casemd6be.model.dto;
 
-
+import com.example.casemd6be.model.DTO.ProductBillDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
