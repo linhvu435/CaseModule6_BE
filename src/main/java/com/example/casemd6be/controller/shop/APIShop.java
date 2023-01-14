@@ -16,15 +16,18 @@ public class APIShop {
 
     @GetMapping("/{id}")
     public ResponseEntity findShopById(@PathVariable long id) {
-            Shop shop1 = shopService.findShopById(id);
+            Shop shop1 = shopService.findShopByAccountId(id);
         return new ResponseEntity<>(shop1, HttpStatus.OK);
     }
     @GetMapping("/shop/{id}")
     public ResponseEntity findShop(@PathVariable long id) {
-        return new ResponseEntity<>(shopService.findShopById(id), HttpStatus.OK);
+        return new ResponseEntity<>(shopService.findShopByAccountId(id), HttpStatus.OK);
     }
     @GetMapping("/shopId/{id}")
-    public Long FindIdShopByProductId(@PathVariable long id){
-        return  shopService.FindShopIdByProductId(id);
+    public Long FindIdShopByProductId(@PathVariable long id) {
+        return shopService.FindShopIdByProductId(id);
     }
+
+
+
 }

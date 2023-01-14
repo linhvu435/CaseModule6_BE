@@ -1,12 +1,11 @@
 package com.example.casemd6be.controller.account;
 
 import com.example.casemd6be.model.Account;
-import com.example.casemd6be.model.DTO.SocialDTO;
+import com.example.casemd6be.model.dto.SocialDTO;
 import com.example.casemd6be.model.JwtResponse;
 import com.example.casemd6be.model.Roles;
 import com.example.casemd6be.model.Shop;
 import com.example.casemd6be.repository.IAccountRepo;
-import com.example.casemd6be.repository.linh.IShopRepo;
 import com.example.casemd6be.repository.sang.AccountRepo;
 import com.example.casemd6be.repository.son.IRoloesRepoS;
 import com.example.casemd6be.service.JwtService;
@@ -14,7 +13,6 @@ import com.example.casemd6be.service.impl.AccountServiceImpl;
 import com.example.casemd6be.service.impl.RolesServiceImpl;
 import com.example.casemd6be.service.linh.ShopAddressService;
 import com.example.casemd6be.service.linh.ShopService;
-import org.aspectj.lang.annotation.SuppressAjWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
