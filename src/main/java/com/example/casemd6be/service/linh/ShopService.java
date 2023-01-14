@@ -9,14 +9,22 @@ import org.springframework.stereotype.Service;
 public class ShopService {
     @Autowired
     IShopRepo iShopRepo;
-    public Shop findShopById(long id){
-        return iShopRepo.findShopById(id);
+    public Shop findShopByAccountId(long id){
+        return iShopRepo.findShopByAccountId(id);
     }
     public Long findIdShopAddressByIdAccount(long id){
         return iShopRepo.findIdShopAddressByIdAccount(id);
     }
 
     public Shop findshopbyidaccount(long id){
-        return iShopRepo.findShopById(id);
+        return iShopRepo.findShopByAccountId(id);
+    }
+
+    public Shop findById(long id) {
+        return iShopRepo.findById(id).get();
+    }
+
+    public Long FindShopIdByProductId(long id){
+        return iShopRepo.FindShopIdByProductId(id);
     }
 }

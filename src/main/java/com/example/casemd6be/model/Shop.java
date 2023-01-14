@@ -4,6 +4,7 @@ package com.example.casemd6be.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -15,6 +16,8 @@ public class Shop {
     private String name;
     private long status;
     private String img;
+
+    private LocalDate date;
 
     @OneToOne
     private ShopAddress shopAddress;

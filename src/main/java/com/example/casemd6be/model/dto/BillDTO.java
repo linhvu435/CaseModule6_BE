@@ -1,6 +1,6 @@
 package com.example.casemd6be.model.dto;
 
-import com.example.casemd6be.model.DTO.ProductBillDTO;
+import com.example.casemd6be.model.dto.ProductBillDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,4 @@ import java.util.List;
 @AllArgsConstructor
 public class BillDTO implements Serializable {
     List<ProductBillDTO> productBillDTOS;
-
 }

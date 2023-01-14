@@ -2,7 +2,7 @@ package com.example.casemd6be.controller.Manh;
 
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.Bill;
-import com.example.casemd6be.model.DTO.ProductInBillDTO;
+import com.example.casemd6be.model.dto.ProductInBillDTO;
 import com.example.casemd6be.model.ImgProduct;
 import com.example.casemd6be.model.Product;
 import com.example.casemd6be.repository.IAccountRepo;
@@ -35,9 +35,9 @@ public class OrderUserAPI {
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Bill> bills1 = iBillRepoM.findAllBbyIdAccount(account.getId());
         List<Bill> billList = new ArrayList<>();
-        //check bill của account có trạng thái khác 6
+        //check bill của account có trạng thái khác 7
         for (int i = 0; i < bills1.size(); i++) {
-            if (bills1.get(i).getBillStatus().getId() != 6) {
+            if (bills1.get(i).getBillStatus().getId() != 7) {
                 billList.add(bills1.get(i));
             }
         };
@@ -52,7 +52,7 @@ public class OrderUserAPI {
         List<Bill> billList=new ArrayList<>();
         //check bill của account có trạng thái khác 6
         for (int i = 0; i < bills1.size(); i++) {
-           if(bills1.get(i).getBillStatus().getId()!=6){
+           if(bills1.get(i).getBillStatus().getId()!=7){
                billList.add(bills1.get(i));
            }
         }
@@ -68,14 +68,9 @@ public class OrderUserAPI {
         for (int i = 0; i < bill.getProduct().size(); i++) {
             products.add(bill.getProduct().get(i));
         }
-        List<ProductInBillDTO> productInBillDTOList =new ArrayList<>();
-        ProductInBillDTO productInBillDTO ;
-        for (int i = 0; i < products.size(); i++) {
-            List<ImgProduct> imgProducts = iImgProductRepo.findAllImgByProduct(products.get(i).getId());
-            productInBillDTO=new ProductInBillDTO(products.get(i).getId(),products.get(i).getName(),products.get(i).getPrice(),imgProducts.get(0).getName());
-            productInBillDTOList.add(productInBillDTO);
-        }
-        return new ResponseEntity<>(productInBillDTOList, HttpStatus.OK);
+
+        ProductInBillDTO productInBillDTO = new ProductInBillDTO(bill.getId(),bill.getAccount().getName(),products,bill.getTotalprice());
+        return new ResponseEntity<>(productInBillDTO, HttpStatus.OK);
     }
 
     @GetMapping("/showBillShop/{id}")

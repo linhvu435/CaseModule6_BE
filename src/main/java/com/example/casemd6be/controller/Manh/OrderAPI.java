@@ -7,8 +7,8 @@ import com.example.casemd6be.repository.manh.IBillRepoM;
 import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.manh.IShopRepoM;
-import com.example.casemd6be.model.DTO.ProductInBillDTO;
-import com.example.casemd6be.repository.manh.*;
+import com.example.casemd6be.model.dto.ProductInBillDTO;
+import com.example.casemd6be.repository .manh.*;
 import com.example.casemd6be.repository.son.IAccountRepoS;
 import com.example.casemd6be.repository.son.IProductRepoS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +45,18 @@ public class OrderAPI {
     @Autowired
     private IImgProductRepoM iImgProductRepo;
 
+
+    @GetMapping("/getshop")
+    public ResponseEntity<?> getshop() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
+        Shop shop = iShopRepoM.findShopByAccountId(account.getId());
+        if (shop == null ){
+            return new ResponseEntity<>("Chưa đki dịch vụ bán hàng !", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(shop, HttpStatus.OK);
+        }
+    }
     @GetMapping("/getallp")
     public ResponseEntity<List<Product>> getallPByShop() {
         return new ResponseEntity<>(iProductRepoM.findAllP(), HttpStatus.OK);
@@ -59,7 +71,7 @@ public class OrderAPI {
     public ResponseEntity<List<BillStatus>> getallbillstatus() {
         List<BillStatus> billStatuses =iBillStatusM.findAllBillStatus();
         for (int i = 0; i < billStatuses.size(); i++) {
-            if (billStatuses.get(i).getId()==6){
+            if (billStatuses.get(i).getId()==7){
                 billStatuses.remove(billStatuses.get(i));
             }
         }
@@ -107,14 +119,9 @@ public class OrderAPI {
         for (int i = 0; i < bill.getProduct().size(); i++) {
             products.add(bill.getProduct().get(i));
         }
-        List<ProductInBillDTO> productInBillDTOList =new ArrayList<>();
-        ProductInBillDTO productInBillDTO ;
-        for (int i = 0; i < products.size(); i++) {
-            List<ImgProduct> imgProducts = iImgProductRepo.findAllImgByProduct(products.get(i).getId());
-            productInBillDTO=new ProductInBillDTO(products.get(i).getId(),products.get(i).getName(),products.get(i).getPrice(),imgProducts.get(0).getName());
-            productInBillDTOList.add(productInBillDTO);
-        }
-        return new ResponseEntity<>(productInBillDTOList, HttpStatus.OK);
+
+        ProductInBillDTO productInBillDTO = new ProductInBillDTO(bill.getId(),bill.getAccount().getName(),products,bill.getTotalprice());
+        return new ResponseEntity<>(productInBillDTO, HttpStatus.OK);
     }
 
     @GetMapping("/showBillShop/{id}")
@@ -137,7 +144,6 @@ public class OrderAPI {
                 billList1.add(billList.get(i));
             }
         }
-
         return new ResponseEntity<>(billList1, HttpStatus.OK);
     }
 
@@ -147,10 +153,16 @@ public class OrderAPI {
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Product> products1 = new ArrayList<>();
         Bill bills = new Bill();
+        boolean check = true;
         //thêm các sp từ id truyen vao
         for (int i = 0; i < billDTO.getProductBillDTOS().size(); i++) {
-            products1.add(iProductRepoS.findProductById(billDTO.getProductBillDTOS().get(i).getIdproduct()));
+            Product product =iProductRepoS.findProductById(billDTO.getProductBillDTOS().get(i).getIdproduct());
+            products1.add(product);
+            if (product.getAmount()<billDTO.getProductBillDTOS().get(i).getAmount()){
+                check=false;
+            }
         }
+        if (check){
         List<Product> products = new ArrayList<>();
         List<Shop> shops1 = new ArrayList<>();
         List<Shop> shops = iShopRepoM.findAllShop();
@@ -178,7 +190,12 @@ public class OrderAPI {
                 for (int k = 0; k < billDTO.getProductBillDTOS().size(); k++) {
                     if (products.get(j).getId() == billDTO.getProductBillDTOS().get(k).getIdproduct()) {
                         totalprice += products.get(j).getPrice() * billDTO.getProductBillDTOS().get(k).getAmount();
+
+                        long amount= products.get(j).getAmount()-billDTO.getProductBillDTOS().get(k).getAmount() ;
+                        products.get(j).setAmount(amount);
+                        iProductRepoM.save(products.get(j));
                     }
+
                 }
             }
             bills.setProduct(products);
@@ -187,7 +204,7 @@ public class OrderAPI {
             BillStatus billStatus =new BillStatus();
             billStatus.setId(1);
 
-            billStatus.setName("Bill ảo");
+            billStatus.setName("Chờ xác nhận");
             bills.setBillStatus(billStatus);
             bills.setTotalprice(totalprice);
             toSaveList.add(bills);
@@ -197,11 +214,14 @@ public class OrderAPI {
             totalprice = 0;
         }
         List<Bill> saved = (List<Bill>)  iBillRepoM.saveAll(toSaveList);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(products);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 
-    @PostMapping("/setbill/{idbill}/{idstatus}")
+    @GetMapping("/setbill/{idbill}/{idstatus}")
     public ResponseEntity<Bill> setbill(@PathVariable long idbill, @PathVariable long idstatus) {
         Bill bill = iBillRepoM.findBillById(idbill);
         BillStatus billStatus = iBillStatusM.findBillStatusById(idstatus);

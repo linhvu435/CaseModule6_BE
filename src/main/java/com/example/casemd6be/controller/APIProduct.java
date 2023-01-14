@@ -1,11 +1,15 @@
 package com.example.casemd6be.controller;
 
+import com.example.casemd6be.model.CreateProductRequest;
 import com.example.casemd6be.model.Product;
 import com.example.casemd6be.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/products")
@@ -26,9 +30,8 @@ public class APIProduct {
         }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product product){
-        productService.save(product);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Product> create(@RequestBody CreateProductRequest request){
+        return ResponseEntity.ok(productService.save(request));
     }
 
     @DeleteMapping("{id}")
@@ -44,12 +47,17 @@ public class APIProduct {
     @PutMapping("/{id}")
     public ResponseEntity<Product> edit( @RequestBody Product product, @PathVariable Long id) {
         product.setId(id);
-        productService.save(product);
+//        productService.save(product);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
     @GetMapping("/findIdProduct")
     public Long getIdProduct(){
         return productService.FindMaxIdProduct();
+    }
+
+    @GetMapping("/showShopProduct/{id}")
+    public List<Product> getAllProductByIdShop(@PathVariable     long id){
+        return productService.getProductByShopId(id);
     }
 
 }
