@@ -205,7 +205,7 @@ public class OrderAPI {
             BillStatus billStatus =new BillStatus();
             billStatus.setId(1);
 
-            billStatus.setName("Bill ảo");
+            billStatus.setName("Chờ xác nhận");
             bills.setBillStatus(billStatus);
             bills.setTotalprice(totalprice);
             toSaveList.add(bills);
