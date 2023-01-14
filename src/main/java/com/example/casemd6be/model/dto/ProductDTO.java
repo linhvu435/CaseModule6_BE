@@ -1,4 +1,4 @@
-package com.example.casemd6be.model.DTO;
+package com.example.casemd6be.model.dto;
 
 import com.example.casemd6be.model.Category;
 import com.example.casemd6be.model.ImgProduct;
@@ -6,8 +6,6 @@ import com.example.casemd6be.model.Shop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToOne;
 import java.util.List;
 @Data
 @AllArgsConstructor

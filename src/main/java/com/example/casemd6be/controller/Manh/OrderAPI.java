@@ -2,12 +2,12 @@ package com.example.casemd6be.controller.Manh;
 
 import com.example.casemd6be.model.*;
 
-import com.example.casemd6be.model.DTO.BillDTO;
+import com.example.casemd6be.model.dto.BillDTO;
 import com.example.casemd6be.repository.manh.IBillRepoM;
 import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
 import com.example.casemd6be.repository.manh.IShopRepoM;
-import com.example.casemd6be.model.DTO.ProductInBillDTO;
+import com.example.casemd6be.model.dto.ProductInBillDTO;
 import com.example.casemd6be.repository.manh.*;
 import com.example.casemd6be.repository.son.IAccountRepoS;
 import com.example.casemd6be.repository.son.IProductRepoS;

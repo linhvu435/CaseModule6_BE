@@ -1,6 +1,4 @@
-package com.example.casemd6be.model.DTO;
-
-import lombok.Data;
+package com.example.casemd6be.model.dto;
 
 
 public class ProductBillDTO{

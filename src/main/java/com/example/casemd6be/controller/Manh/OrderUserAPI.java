@@ -2,7 +2,7 @@ package com.example.casemd6be.controller.Manh;
 
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.Bill;
-import com.example.casemd6be.model.DTO.ProductInBillDTO;
+import com.example.casemd6be.model.dto.ProductInBillDTO;
 import com.example.casemd6be.model.ImgProduct;
 import com.example.casemd6be.model.Product;
 import com.example.casemd6be.repository.IAccountRepo;
