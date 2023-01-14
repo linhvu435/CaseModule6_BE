@@ -71,7 +71,7 @@ public class OrderAPI {
     public ResponseEntity<List<BillStatus>> getallbillstatus() {
         List<BillStatus> billStatuses =iBillStatusM.findAllBillStatus();
         for (int i = 0; i < billStatuses.size(); i++) {
-            if (billStatuses.get(i).getId()==6){
+            if (billStatuses.get(i).getId()==7){
                 billStatuses.remove(billStatuses.get(i));
             }
         }
@@ -190,7 +190,8 @@ public class OrderAPI {
                 for (int k = 0; k < billDTO.getProductBillDTOS().size(); k++) {
                     if (products.get(j).getId() == billDTO.getProductBillDTOS().get(k).getIdproduct()) {
                         totalprice += products.get(j).getPrice() * billDTO.getProductBillDTOS().get(k).getAmount();
-
+                        long amountsell = products.get(j).getAmount()+billDTO.getProductBillDTOS().get(k).getAmount();
+                        products.get(j).setAmountsell(amountsell);
                         long amount= products.get(j).getAmount()-billDTO.getProductBillDTOS().get(k).getAmount() ;
                         products.get(j).setAmount(amount);
                         iProductRepoM.save(products.get(j));
@@ -214,7 +215,7 @@ public class OrderAPI {
             totalprice = 0;
         }
         List<Bill> saved = (List<Bill>)  iBillRepoM.saveAll(toSaveList);
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(saved);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

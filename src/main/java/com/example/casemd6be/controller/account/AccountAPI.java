@@ -136,25 +136,17 @@ public class AccountAPI {
 
     @PostMapping("/register1")
     public ResponseEntity<?> register1(@RequestBody SocialDTO socialDTO) {
-        List<Account> user1 = iAccountRepo.findAccountByEmail(socialDTO.getEmail());
-        boolean check= true;
-        for (int i = 0; i < user1.size(); i++) {
-            if (user1.get(i).getEmail().equals(socialDTO.getEmail())){
-                check = false;
-            }
-        }
-        if (check){
+        Account user1 = iAccountRepo.findByUsername(socialDTO.getEmail());
+
+        if (user1==null) {
             Account users = new Account();
             users.setUsername(socialDTO.getEmail());
             users.setPassword("0101010101");
             users.setEmail(socialDTO.getEmail());
             users.setImg(socialDTO.getPhotoUrl());
-            String role = "2";
-            Long role1 = Long.parseLong(role);
-            users.setRoles(iRoloesRepoS.findById(role1).get());
+            users.setRoles(iRoloesRepoS.findById(Long.valueOf(2)).get());
             users.setStatus(1);
             iAccountRepo.save(users);
-
                 Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(users.getUsername(), users.getPassword()));
 
@@ -164,18 +156,19 @@ public class AccountAPI {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
                 Account currentUser = accountService.findByUsername(users.getUsername());
                     return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                            currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),users.getAddress(),
+                            currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),currentUser.getAddress(),
                             currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
 
         }else  {
+            Account account = iAccountRepo.findByUsername(socialDTO.getEmail());
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(socialDTO.getName(), "0101010101"));
+                    new UsernamePasswordAuthenticationToken(account.getUsername(), "0101010101"));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String jwt = socialDTO.getIdToken();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            Account currentUser = accountService.findByUsername(socialDTO.getName());
+            Account currentUser = accountService.findByUsername(socialDTO.getEmail());
             return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
                     currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),currentUser.getAddress(),
                     currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));

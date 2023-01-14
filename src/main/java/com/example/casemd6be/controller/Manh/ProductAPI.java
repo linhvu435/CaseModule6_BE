@@ -46,7 +46,23 @@ public class ProductAPI {
         List<Category> categories1 = new ArrayList<>();
         for (int i = 0; i < categories.size(); i++) {
             for (int j = 0; j < products.size(); j++) {
-                if (categories.get(i).getId()==products.get(i).getCategory().getId()){
+                if (categories.get(i).getId()==products.get(j).getCategory().getId()){
+                    categories1.add(categories.get(i));
+                    break;
+                }
+            }
+        }
+        return new ResponseEntity<>(categories1, HttpStatus.OK);
+    }
+
+    @GetMapping("/getcategoryshopuser/{idProduct}")
+    public ResponseEntity<?> getallcategoryshopuser(@PathVariable long idProduct) {
+        List<Product> products = iProductRepoM.findProductByShopId(idProduct);
+        List<Category> categories = iCategoryM.findAllCategory();
+        List<Category> categories1 = new ArrayList<>();
+        for (int i = 0; i < categories.size(); i++) {
+            for (int j = 0; j < products.size(); j++) {
+                if (categories.get(i).getId()==products.get(j).getCategory().getId()){
                     categories1.add(categories.get(i));
                     break;
                 }
