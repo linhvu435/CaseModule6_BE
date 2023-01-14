@@ -1,7 +1,6 @@
 package com.example.casemd6be.controller.shop;
 
 import com.example.casemd6be.model.Shop;
-import com.example.casemd6be.model.DTO.*;
 import com.example.casemd6be.service.linh.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
