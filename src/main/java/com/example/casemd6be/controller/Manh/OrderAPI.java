@@ -45,6 +45,18 @@ public class OrderAPI {
     @Autowired
     private IImgProductRepoM iImgProductRepo;
 
+
+    @GetMapping("/getshop")
+    public ResponseEntity<?> getshop() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
+        Shop shop = iShopRepoM.findShopByAccountId(account.getId());
+        if (shop == null ){
+            return new ResponseEntity<>("Chưa đki dịch vụ bán hàng !", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(shop, HttpStatus.OK);
+        }
+    }
     @GetMapping("/getallp")
     public ResponseEntity<List<Product>> getallPByShop() {
         return new ResponseEntity<>(iProductRepoM.findAllP(), HttpStatus.OK);
@@ -141,10 +153,16 @@ public class OrderAPI {
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Product> products1 = new ArrayList<>();
         Bill bills = new Bill();
+        boolean check = true;
         //thêm các sp từ id truyen vao
         for (int i = 0; i < billDTO.getProductBillDTOS().size(); i++) {
-            products1.add(iProductRepoS.findProductById(billDTO.getProductBillDTOS().get(i).getIdproduct()));
+            Product product =iProductRepoS.findProductById(billDTO.getProductBillDTOS().get(i).getIdproduct());
+            products1.add(product);
+            if (product.getAmount()<billDTO.getProductBillDTOS().get(i).getAmount()){
+                check=false;
+            }
         }
+        if (check){
         List<Product> products = new ArrayList<>();
         List<Shop> shops1 = new ArrayList<>();
         List<Shop> shops = iShopRepoM.findAllShop();
@@ -172,7 +190,12 @@ public class OrderAPI {
                 for (int k = 0; k < billDTO.getProductBillDTOS().size(); k++) {
                     if (products.get(j).getId() == billDTO.getProductBillDTOS().get(k).getIdproduct()) {
                         totalprice += products.get(j).getPrice() * billDTO.getProductBillDTOS().get(k).getAmount();
+
+                        long amount= products.get(j).getAmount()-billDTO.getProductBillDTOS().get(k).getAmount() ;
+                        products.get(j).setAmount(amount);
+                        iProductRepoM.save(products.get(j));
                     }
+
                 }
             }
             bills.setProduct(products);
@@ -191,7 +214,10 @@ public class OrderAPI {
             totalprice = 0;
         }
         List<Bill> saved = (List<Bill>)  iBillRepoM.saveAll(toSaveList);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(products);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 
