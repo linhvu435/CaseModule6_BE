@@ -32,6 +32,6 @@ public interface IAccountRepo extends CrudRepository<Account, Long> {
     Account findAccountById(long id);
 
     @Query(nativeQuery = true,value = "SELECT * from account where email = :email")
-    List<Account> findAccountByEmail(String email);
+    Account findAccountByEmail(String email);
 
 }

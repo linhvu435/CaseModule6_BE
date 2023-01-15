@@ -5,9 +5,8 @@ import com.example.casemd6be.model.dto.ShopDetailDTO;
 import com.example.casemd6be.model.Product;
 import com.example.casemd6be.model.Shop;
 import com.example.casemd6be.repository.IAccountRepo;
-import com.example.casemd6be.repository.manh.ICategoryM;
-import com.example.casemd6be.repository.manh.IProductRepoM;
-import com.example.casemd6be.repository.manh.IShopRepoM;
+import com.example.casemd6be.repository.linh.IImgProductRepo;
+import com.example.casemd6be.repository.manh.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +35,51 @@ public class ProductAPI {
     private IAccountRepo iAccountRepo;
     @Autowired
     private ICategoryM iCategoryM;
+    @Autowired
+    private IImgProductRepoM iImgProductRepoM;
+    @Autowired
+    private ICommentRepoM iCommentRepoM;
 
+    @GetMapping("/getstarproduct/{id}")
+    public ResponseEntity<?> getstarproduct(@PathVariable  long id) {
+        List<Comment> comments =iCommentRepoM.findAllCommentByP_ID(id);
+        long startotal = 0;
+        for (int i = 0; i < comments.size(); i++) {
+            startotal+=comments.get(i).getStar();
+        }
+        startotal = startotal/comments.size();
+        return new ResponseEntity<>(startotal, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getstarshop/{id}")
+    public ResponseEntity<?> géttarshop(@PathVariable long id) {
+        List<Product> products = iProductRepoM.findProductByShopId(id);
+        long startotalshop=0;
+        long startotal = 0;
+        long count =0 ;
+        for (Product product : products) {
+            List<Comment> comments = iCommentRepoM.findAllCommentByP_ID(product.getId());
+            if (comments.size() != 0) {
+                for (Comment comment : comments) {
+                    startotal += comment.getStar();
+                }
+                startotal=startotal/comments.size();
+                startotalshop+=startotal;
+                startotal=0;
+                count++;
+            }
+        }
+        startotalshop= startotalshop/count;
+        return new ResponseEntity<>(startotalshop, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getimgsproduct/{id}")
+    public ResponseEntity<?> getallimgp(@PathVariable  long id) {
+        List<ImgProduct> imgProducts = iImgProductRepoM.findAllImgByProduct(id);
+        return new ResponseEntity<>(imgProducts, HttpStatus.OK);
+    }
     @GetMapping("/getcategoryshopproduct")
     public ResponseEntity<?> getallcategorymyshop() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

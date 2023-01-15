@@ -28,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.*;
 
 @Validated
@@ -77,33 +78,29 @@ public class AccountAPI {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody Account account, BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> createUser(@RequestBody Account account) {
+        Account account1 = iAccountRepo.findByUsername(account.getUsername());
+        Account account2 = iAccountRepo.findByPhoneNumber(account.getPhoneNumber());
+        Account account3 = iAccountRepo.findAccountByEmail(account.getEmail());
+        boolean checkusername= account1 ==null;
+        boolean checkphone= account2  ==null;
+        boolean checkemail= account3 ==null;
+        List<Boolean> resuilt = new ArrayList<>();
+
+        if (checkusername&&checkemail&&checkphone){
+            account.setDate(LocalDate.now());
+            account.setStatus(1);
+            Roles roles = iRoloesRepoS.findById(Long.valueOf(2)).get();
+            account.setRoles(roles);
+            accountService.save(account);
+            return new ResponseEntity<>(resuilt, HttpStatus.OK);
+
+        }else {
+            resuilt.add(checkusername);
+            resuilt.add(checkusername);
+            resuilt.add(checkemail);
+            return new ResponseEntity<>(resuilt, HttpStatus.BAD_REQUEST);
         }
-        Iterable<Account> accounts = accountService.findAll();
-        for (Account currentUser : accounts) {
-            if (currentUser.getUsername().equals(account.getUsername())) {
-                return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
-            }
-            if (currentUser.getEmail().equals(account.getEmail())) {
-                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
-            }
-        }
-        if (account.getRoles() != null) {
-            Roles role = rolesService.findByName("ROLE_ADMIN");
-            Set<Roles> roles = new HashSet<>();
-            roles.add(role);
-            account.setRoles(role);
-        } else {
-            Roles role1 = rolesService.findByName("ROLE_USER");
-            Set<Roles> roles1 = new HashSet<>();
-            roles1.add(role1);
-            account.setRoles(role1);
-        }
-        account.setPassword(account.getPassword());
-        accountService.save(account);
-        return new ResponseEntity<>(account, HttpStatus.CREATED);
     }
 
 
@@ -128,7 +125,7 @@ public class AccountAPI {
                     currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
         }else {
             return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),"Chưa đăng kí dịch vụ bán hàng!",
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),null,
                     currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
         }
     }
