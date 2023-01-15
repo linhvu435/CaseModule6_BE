@@ -7,6 +7,7 @@ import com.example.casemd6be.model.Shop;
 import com.example.casemd6be.repository.IAccountRepo;
 import com.example.casemd6be.repository.linh.IImgProductRepo;
 import com.example.casemd6be.repository.manh.*;
+import com.example.casemd6be.repository.son.IRoloesRepoS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +41,23 @@ public class ProductAPI {
     private IImgProductRepoM iImgProductRepoM;
     @Autowired
     private ICommentRepoM iCommentRepoM;
+    @Autowired
+    private IRoloesRepoS iRoloesRepoS;
+
+
+    @PostMapping("/registershop")
+    public ResponseEntity<?> registershop(@RequestBody Shop shop) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
+        Roles roles = iRoloesRepoS.findById(Long.valueOf(3)).get();
+        account.setRoles(roles);
+        iAccountRepo.save(account);
+        shop.setAccount(account);
+        shop.setStatus(1);
+        shop.setDate(LocalDate.now());
+        iShopRepoM.save(shop);
+        return new ResponseEntity<>(shop, HttpStatus.OK);
+    }
 
     @GetMapping("/getstarproduct/{id}")
     public ResponseEntity<?> getstarproduct(@PathVariable  long id) {
