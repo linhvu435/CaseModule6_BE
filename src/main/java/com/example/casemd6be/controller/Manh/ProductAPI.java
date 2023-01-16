@@ -79,4 +79,5 @@ public class ProductAPI {
         Collections.sort(shopDetailDTOS1,new Soft());
         return new ResponseEntity<>(shopDetailDTOS1, HttpStatus.OK);
     }
+
 }

@@ -29,7 +29,7 @@ public interface AccountRepo extends CrudRepository<Account, Long> {
 
     Account findByUsername(String username);
 
-    Account findAccountById(long id);
+
 
 
 

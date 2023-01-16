@@ -4,14 +4,12 @@ import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.JwtResponse;
 import com.example.casemd6be.model.Roles;
 import com.example.casemd6be.model.Shop;
-import com.example.casemd6be.repository.linh.IShopRepo;
 import com.example.casemd6be.repository.sang.AccountRepo;
 import com.example.casemd6be.service.JwtService;
-import com.example.casemd6be.service.impl.AccountServiceImpl;
-import com.example.casemd6be.service.impl.RolesServiceImpl;
+import com.example.casemd6be.service.sang.impl.AccountServiceImpl;
+import com.example.casemd6be.service.sang.impl.RolesServiceImpl;
 import com.example.casemd6be.service.linh.ShopAddressService;
 import com.example.casemd6be.service.linh.ShopService;
-import org.aspectj.lang.annotation.SuppressAjWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -140,7 +138,6 @@ public class AccountAPI {
         }
         account.setId(userOptional.get().getId());
         account.setUsername(userOptional.get().getUsername());
-//        account.setEnabled(userOptional.get().isEnabled());
         account.setPassword(userOptional.get().getPassword());
         account.setRoles(userOptional.get().getRoles());
         account.setImg(userOptional.get().getImg());
@@ -148,7 +145,6 @@ public class AccountAPI {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
-    //    thêm
     @GetMapping("/checkUsername")
     public ResponseEntity<Account> checkUser(@RequestParam String username) {
         Account account1 = accountService.findByName(username);

@@ -1,9 +1,9 @@
-package com.example.casemd6be.service.impl;
+package com.example.casemd6be.service.sang.impl;
 
 import com.example.casemd6be.model.Account;
 import com.example.casemd6be.model.Roles;
 import com.example.casemd6be.repository.sang.AccountRepo;
-import com.example.casemd6be.service.IAccountService;
+import com.example.casemd6be.service.sang.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;

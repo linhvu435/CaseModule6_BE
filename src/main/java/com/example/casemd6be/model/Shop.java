@@ -15,6 +15,7 @@ public class Shop {
     private String name;
     private long status;
     private String img;
+    private String phone;
 
     @OneToOne
     private ShopAddress shopAddress;

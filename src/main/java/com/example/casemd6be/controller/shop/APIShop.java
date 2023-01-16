@@ -17,11 +17,8 @@ public class APIShop {
     @GetMapping("/{id}")
     public ResponseEntity findShopById(@PathVariable long id){
             Shop shop1 =  shopService.findShopById(id);
-
                       return new ResponseEntity<>(shop1, HttpStatus.OK);
-
         }
-
 
     @GetMapping("/shop/{id}")
     public ResponseEntity findShop(@PathVariable long id){
