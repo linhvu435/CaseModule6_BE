@@ -199,7 +199,6 @@ public class OrderAPI {
                         long amount= products.get(j).getAmount()-billDTO.getProductBillDTOS().get(k).getAmount() ;
                         products.get(j).setAmount(amount);
                         iProductRepoM.save(products.get(j));
-
                     }
                     if (voucher!=null){
                         if (voucher.getShop().getId()==products.get(j).getShop().getId()){
