@@ -1,6 +1,6 @@
 package com.example.casemd6be.controller.Admin;
 
-import com.example.casemd6be.model.DTO.ProductDTO;
+import com.example.casemd6be.model.dto.ProductDTO;
 import com.example.casemd6be.model.ImgProduct;
 import com.example.casemd6be.model.Product;
 import com.example.casemd6be.repository.manh.IImgProductRepoM;

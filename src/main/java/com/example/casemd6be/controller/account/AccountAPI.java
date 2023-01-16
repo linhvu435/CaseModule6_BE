@@ -1,15 +1,19 @@
 package com.example.casemd6be.controller.account;
 
 import com.example.casemd6be.model.Account;
+import com.example.casemd6be.model.dto.SocialDTO;
 import com.example.casemd6be.model.JwtResponse;
 import com.example.casemd6be.model.Roles;
 import com.example.casemd6be.model.Shop;
+import com.example.casemd6be.repository.IAccountRepo;
 import com.example.casemd6be.repository.sang.AccountRepo;
+import com.example.casemd6be.repository.son.IRoloesRepoS;
 import com.example.casemd6be.service.JwtService;
-import com.example.casemd6be.service.sang.impl.AccountServiceImpl;
-import com.example.casemd6be.service.sang.impl.RolesServiceImpl;
+
 import com.example.casemd6be.service.linh.ShopAddressService;
 import com.example.casemd6be.service.linh.ShopService;
+import com.example.casemd6be.service.sang.impl.AccountServiceImpl;
+import com.example.casemd6be.service.sang.impl.RolesServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -48,13 +52,17 @@ public class AccountAPI {
     private AccountServiceImpl accountService;
 
     @Autowired
-    private  RolesServiceImpl rolesService;
+    private RolesServiceImpl rolesService;
     @Autowired
     private AccountRepo accountRepo;
     @Autowired
     ShopService shopService;
     @Autowired
     ShopAddressService shopAddressService;
+    @Autowired
+    private IAccountRepo iAccountRepo;
+    @Autowired
+    private IRoloesRepoS iRoloesRepoS;
 
     @GetMapping("/users")
     public ResponseEntity<Iterable<Account>> showAllUser() {
@@ -98,6 +106,9 @@ public class AccountAPI {
         accountService.save(account);
         return new ResponseEntity<>(account, HttpStatus.CREATED);
     }
+
+
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Account account) {
         if (!accountService.isRegister(account)) {
@@ -124,6 +135,55 @@ public class AccountAPI {
     }
 
 
+    @PostMapping("/register1")
+    public ResponseEntity<?> register1(@RequestBody SocialDTO socialDTO) {
+        List<Account> user1 = iAccountRepo.findAccountByEmail(socialDTO.getEmail());
+        boolean check= true;
+        for (int i = 0; i < user1.size(); i++) {
+            if (user1.get(i).getEmail().equals(socialDTO.getEmail())){
+                check = false;
+            }
+        }
+        if (check){
+            Account users = new Account();
+            users.setUsername(socialDTO.getEmail());
+            users.setPassword("0101010101");
+            users.setEmail(socialDTO.getEmail());
+            users.setImg(socialDTO.getPhotoUrl());
+            String role = "2";
+            Long role1 = Long.parseLong(role);
+            users.setRoles(iRoloesRepoS.findById(role1).get());
+            users.setStatus(1);
+            iAccountRepo.save(users);
+
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(users.getUsername(), users.getPassword()));
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                String jwt = socialDTO.getIdToken();
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                Account currentUser = accountService.findByUsername(users.getUsername());
+                    return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
+                            currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),users.getAddress(),
+                            currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+
+        }else  {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(socialDTO.getName(), "0101010101"));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = socialDTO.getIdToken();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Account currentUser = accountService.findByUsername(socialDTO.getName());
+            return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
+                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),currentUser.getAddress(),
+                    currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        }
+    }
+
+
     @GetMapping("/users/{id}")
     public ResponseEntity<Account> getProfile(@PathVariable Long id) {
         Optional<Account> userOptional = this.accountService.findById(id);
@@ -138,6 +198,7 @@ public class AccountAPI {
         }
         account.setId(userOptional.get().getId());
         account.setUsername(userOptional.get().getUsername());
+//        account.setEnabled(userOptional.get().isEnabled());
         account.setPassword(userOptional.get().getPassword());
         account.setRoles(userOptional.get().getRoles());
         account.setImg(userOptional.get().getImg());
@@ -145,6 +206,7 @@ public class AccountAPI {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
+    //    thêm
     @GetMapping("/checkUsername")
     public ResponseEntity<Account> checkUser(@RequestParam String username) {
         Account account1 = accountService.findByName(username);

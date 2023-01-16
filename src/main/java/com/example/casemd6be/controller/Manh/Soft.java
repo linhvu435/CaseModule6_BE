@@ -1,6 +1,6 @@
 package com.example.casemd6be.controller.Manh;
 
-import com.example.casemd6be.model.DTO.ShopDetailDTO;
+import com.example.casemd6be.model.dto.ShopDetailDTO;
 
 import java.util.Comparator;
 
