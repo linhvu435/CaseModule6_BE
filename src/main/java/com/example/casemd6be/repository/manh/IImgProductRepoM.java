@@ -12,5 +12,4 @@ public interface IImgProductRepoM extends PagingAndSortingRepository<ImgProduct,
     @Query(nativeQuery = true, value = "SELECT * FROM img_product where product_id = :product_id")
     List<ImgProduct> findAllImgByProduct(long product_id);
 
-
 }

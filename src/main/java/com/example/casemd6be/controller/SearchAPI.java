@@ -33,6 +33,11 @@ public class SearchAPI {
     public ResponseEntity<?> getallcategory() {
         return new ResponseEntity<>(iCategoryM.findAllCategory(), HttpStatus.OK);
     }
+
+    @GetMapping("/getallproduct")
+    public ResponseEntity<?> getallproduct() {
+        return new ResponseEntity<>(iProductRepoM.findAllP(), HttpStatus.OK);
+    }
     @GetMapping("/{name}")
     public ResponseEntity<List<Product>> findByName(@PathVariable String name) {
         return new ResponseEntity<>(iProductRepoM.findByName(name), HttpStatus.OK);
@@ -44,7 +49,7 @@ public class SearchAPI {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping("/searchcategoryandname/{name}/{category_id}")
+    @GetMapping("/searchcategoryandname/{category_id}/{name}")
     public ResponseEntity<List<Product>> findByCategoryAndName(@PathVariable long category_id, @PathVariable String name) {
         return new ResponseEntity<>(iProductRepoM.findProductByCategory_IdAndName(name, category_id), HttpStatus.OK);
     }

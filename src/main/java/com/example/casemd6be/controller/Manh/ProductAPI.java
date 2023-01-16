@@ -6,6 +6,7 @@ import com.example.casemd6be.model.Product;
 import com.example.casemd6be.model.Shop;
 import com.example.casemd6be.repository.IAccountRepo;
 import com.example.casemd6be.repository.linh.IImgProductRepo;
+import com.example.casemd6be.repository.linh.IShopAddressRepo;
 import com.example.casemd6be.repository.manh.*;
 import com.example.casemd6be.repository.son.IRoloesRepoS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,13 @@ public class ProductAPI {
     private ICommentRepoM iCommentRepoM;
     @Autowired
     private IRoloesRepoS iRoloesRepoS;
+    @Autowired
+    private IShopAddressRepo iShopAddressRepo;
 
+    @GetMapping("/getalladdressshop")
+    public  ResponseEntity<?> getallshopaddress(){
+        return new ResponseEntity<>(iShopAddressRepo.findAll(), HttpStatus.OK);
+    }
 
     @PostMapping("/registershop")
     public ResponseEntity<?> registershop(@RequestBody Shop shop) {
@@ -52,6 +59,7 @@ public class ProductAPI {
         Roles roles = iRoloesRepoS.findById(Long.valueOf(3)).get();
         account.setRoles(roles);
         iAccountRepo.save(account);
+        shop.setImg("https://cdn.vietnambiz.vn/2019/10/3/color-silhouette-cartoon-facade-shop-store-vector-14711058-1570007843495391141359-1570076859193969194096-15700769046292030065819-1570076927728377843390.png");
         shop.setAccount(account);
         shop.setStatus(1);
         shop.setDate(LocalDate.now());
@@ -167,7 +175,11 @@ public class ProductAPI {
             Product product = products.remove(j);
             products.add(i,product);
         }
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        List<Product> products2 = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            products2.add(products.get(i));
+        }
+        return new ResponseEntity<>(products2, HttpStatus.OK);
     }
 
     @GetMapping("/gettopsellproduct")
@@ -183,6 +195,7 @@ public class ProductAPI {
             products1.add(products.get(i));
         }
         }
+
         return new ResponseEntity<>(products1, HttpStatus.OK);
     }
 

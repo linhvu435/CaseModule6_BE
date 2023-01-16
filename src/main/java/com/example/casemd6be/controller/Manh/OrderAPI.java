@@ -44,6 +44,8 @@ public class OrderAPI {
 
     @Autowired
     private IImgProductRepoM iImgProductRepo;
+    @Autowired
+    private IVoucherRepoM iVoucherRepoM;
 
 
     @GetMapping("/getshop")
@@ -147,8 +149,8 @@ public class OrderAPI {
         return new ResponseEntity<>(billList1, HttpStatus.OK);
     }
 
-    @PostMapping("/createbill")
-    public ResponseEntity<?> searchbill(@RequestBody BillDTO billDTO) {
+    @PostMapping("/createbill/{namevoucher}")
+    public ResponseEntity<?> searchbill(@RequestBody BillDTO billDTO,@PathVariable String namevoucher) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Product> products1 = new ArrayList<>();
@@ -178,7 +180,9 @@ public class OrderAPI {
         }
         double totalprice = 0;
         List<Bill> toSaveList = new ArrayList<>();
-        //tạo bill cho các sp của từng shop
+            Voucher voucher = iVoucherRepoM.findVoucherByName(namevoucher);
+
+            //tạo bill cho các sp của từng shop
         for (int i = 0; i < shops1.size(); i++) {
             //them sp của từng shop vào
             for (int j = 0; j < products1.size(); j++) {
@@ -195,10 +199,29 @@ public class OrderAPI {
                         long amount= products.get(j).getAmount()-billDTO.getProductBillDTOS().get(k).getAmount() ;
                         products.get(j).setAmount(amount);
                         iProductRepoM.save(products.get(j));
+
+                    }
+                    if (voucher!=null){
+                        if (voucher.getShop().getId()==products.get(j).getShop().getId()){
+                            if (voucher.getVoucherType().getId()==1){
+                                totalprice = totalprice-((totalprice*10)/100);
+                                long amount =voucher.getAmount();
+                                amount--;
+                                voucher.setAmount(amount);
+                                iVoucherRepoM.save(voucher);
+                            } else if(voucher.getVoucherType().getId()==2) {
+                                totalprice = totalprice-((totalprice*5)/100);
+                                long amount =voucher.getAmount();
+                                amount--;
+                                voucher.setAmount(amount);
+                                iVoucherRepoM.save(voucher);
+                            }
+                        }
                     }
 
                 }
             }
+            bills.setVoucher(voucher);
             bills.setProduct(products);
             bills.setAccount(account);
             bills.setDate(dateTime);
@@ -207,6 +230,7 @@ public class OrderAPI {
 
             billStatus.setName("Chờ xác nhận");
             bills.setBillStatus(billStatus);
+
             bills.setTotalprice(totalprice);
             toSaveList.add(bills);
 //            iBillRepoM.save(bills);

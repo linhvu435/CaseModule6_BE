@@ -90,6 +90,7 @@ public class AccountAPI {
         if (checkusername&&checkemail&&checkphone){
             account.setDate(LocalDate.now());
             account.setStatus(1);
+            account.setImg("https://st.quantrimang.com/photos/image/2020/02/22/avatar-den-co-don-9.png");
             Roles roles = iRoloesRepoS.findById(Long.valueOf(2)).get();
             account.setRoles(roles);
             accountService.save(account);
@@ -107,26 +108,31 @@ public class AccountAPI {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Account account) {
-        if (!accountService.isRegister(account)) {
-            return new ResponseEntity<>("1", HttpStatus.NOT_FOUND);
-        }
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(account.getUsername(), account.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = jwtService.createToken(authentication);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Account currentUser = accountService.findByUsername(account.getUsername());
-        Shop idShopAddress = shopService.findshopbyidaccount(currentUser.getId());
-        if (idShopAddress!= null) {
-            return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),idShopAddress.getName(),
-                    currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+        Account account1 = iAccountRepo.findByUsername(account.getUsername());
+        if (account1.getStatus()==2) {
+            return new ResponseEntity<>("Tài khoản đã bị khóa ", HttpStatus.BAD_REQUEST);
         }else {
-            return ResponseEntity.ok(new JwtResponse(currentUser.getId(),jwt, userDetails.getUsername(),
-                    currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(),currentUser.getAddress(),null,
-                    currentUser.getGender(),currentUser.getDate(),currentUser.getBirthday(),userDetails.getAuthorities()));
+            if (!accountService.isRegister(account)) {
+                return new ResponseEntity<>("1", HttpStatus.NOT_FOUND);
+            }
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(account.getUsername(), account.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = jwtService.createToken(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Account currentUser = accountService.findByUsername(account.getUsername());
+            Shop idShopAddress = shopService.findshopbyidaccount(currentUser.getId());
+            if (idShopAddress != null) {
+                return ResponseEntity.ok(new JwtResponse(currentUser.getId(), jwt, userDetails.getUsername(),
+                        currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(), currentUser.getAddress(), idShopAddress.getName(),
+                        currentUser.getGender(), currentUser.getDate(), currentUser.getBirthday(), userDetails.getAuthorities()));
+            } else {
+                return ResponseEntity.ok(new JwtResponse(currentUser.getId(), jwt, userDetails.getUsername(),
+                        currentUser.getEmail(), currentUser.getImg(), currentUser.getPhoneNumber(), currentUser.getAddress(), null,
+                        currentUser.getGender(), currentUser.getDate(), currentUser.getBirthday(), userDetails.getAuthorities()));
+            }
         }
     }
 

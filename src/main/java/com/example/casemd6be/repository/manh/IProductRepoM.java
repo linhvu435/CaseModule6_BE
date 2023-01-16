@@ -29,7 +29,7 @@ public interface IProductRepoM extends PagingAndSortingRepository<Product,Long> 
 
 
     @Query(nativeQuery = true,value = "SELECT * FROM product WHERE name LIKE concat('%',:name,'%') AND category_id = :category_id")
-    List<Product> findProductByCategory_IdAndName(@Param("name") String name ,@Param("category_id") long category_id );
+    List<Product> findProductByCategory_IdAndName(String name , long category_id );
 
     @Query(nativeQuery = true,value = "SELECT MAX(id) FROM product")
     Long FindMaxIdProduct();

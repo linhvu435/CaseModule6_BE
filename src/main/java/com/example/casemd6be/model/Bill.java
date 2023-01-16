@@ -27,4 +27,7 @@ import java.util.List;
     @ManyToOne
     private Account account;
 
+    @OneToOne
+    private Voucher voucher;
+
 }
