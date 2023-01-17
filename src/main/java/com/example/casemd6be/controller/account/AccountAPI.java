@@ -187,12 +187,17 @@ public class AccountAPI {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        account.setId(userOptional.get().getId());
-        account.setUsername(userOptional.get().getUsername());
-//        account.setEnabled(userOptional.get().isEnabled());
-        account.setPassword(userOptional.get().getPassword());
-        account.setRoles(userOptional.get().getRoles());
-        account.setImg(userOptional.get().getImg());
+//        account.setId(userOptional.get().getId());
+//        account.setUsername(userOptional.get().getUsername());
+        account.setEmail(userOptional.get().getEmail());
+//        account.setPassword(userOptional.get().getPassword());
+        account.setPhoneNumber(userOptional.get().getPhoneNumber());
+        account.setBirthday(userOptional.get().getBirthday());
+        account.setAddress(userOptional.get().getAddress());
+        account.setGender(userOptional.get().getName());
+//        account.setName(userOptional.get().getName());
+//        account.setRoles(userOptional.get().getRoles());
+//        account.setImg(userOptional.get().getImg());
         accountService.save(account);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }

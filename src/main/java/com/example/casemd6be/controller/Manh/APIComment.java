@@ -7,11 +7,15 @@ import com.example.casemd6be.model.dto.CommentDTO;
 import com.example.casemd6be.repository.IAccountRepo;
 import com.example.casemd6be.repository.linh.ICommentRepo;
 import com.example.casemd6be.repository.manh.IProductRepoM;
+import com.fasterxml.jackson.datatype.jsr310.deser.key.OffsetTimeKeyDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -36,5 +40,9 @@ public class APIComment {
         comment1.setCmt(comment.getContent());
         iCommentRepo.save(comment1);
         return ResponseEntity.ok(comment1);
+    }
+    @GetMapping("{id}")
+    public Iterable<Comment> findCmtById(@PathVariable long id){
+        return  iCommentRepo.findAllCommentByIdProduct(id);
     }
 }
