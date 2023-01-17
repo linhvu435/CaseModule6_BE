@@ -148,6 +148,18 @@ public class ProductAPI {
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         Shop shop = iShopRepoM.findShopByAccountId(account.getId());
         List<Product> products = iProductRepoM.findProductByShopId(shop.getId());
+        for (int i = 0; i < products.size(); i++) {
+            List<Comment> comments =iCommentRepoM.findAllCommentByP_ID(products.get(i).getId());
+            if (comments.size()!=0) {
+                long startotal = 0;
+                for (int j = 0; j < comments.size(); j++) {
+                    startotal += comments.get(j).getStar();
+                }
+                startotal = startotal / comments.size();
+                products.get(i).setStar(startotal);
+                iProductRepoM.save(products.get(i));
+            }
+        }
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -195,7 +207,6 @@ public class ProductAPI {
             products1.add(products.get(i));
         }
         }
-
         return new ResponseEntity<>(products1, HttpStatus.OK);
     }
 

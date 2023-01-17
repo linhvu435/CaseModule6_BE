@@ -46,6 +46,27 @@ public class OrderAPI {
     private IImgProductRepoM iImgProductRepo;
     @Autowired
     private IVoucherRepoM iVoucherRepoM;
+    @Autowired
+    private ICommentRepoM iCommentRepoM;
+
+
+    @GetMapping("/tinhsaosp")
+    public ResponseEntity<?> tinhsaosp(){
+        List<Product> products2 = iProductRepoM.findAllP();
+        for (Product product : products2) {
+            List<Comment> comments = iCommentRepoM.findAllCommentByP_ID(product.getId());
+            if (comments.size() != 0) {
+                long startotal = 0;
+                for (Comment comment : comments) {
+                    startotal += comment.getStar();
+                }
+                startotal = startotal / comments.size();
+                product.setStar(startotal);
+                iProductRepoM.save(product);
+            }
+        }
+        return new ResponseEntity<>(products2, HttpStatus.OK);
+    }
 
 
     @GetMapping("/getshop")

@@ -152,9 +152,7 @@ public class AccountAPI {
             iAccountRepo.save(users);
                 Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(users.getUsername(), users.getPassword()));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
                 String jwt = socialDTO.getIdToken();
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
                 Account currentUser = accountService.findByUsername(users.getUsername());
@@ -165,10 +163,8 @@ public class AccountAPI {
         }else  {
             Account account = iAccountRepo.findByUsername(socialDTO.getEmail());
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(account.getUsername(), "0101010101"));
-
+            new UsernamePasswordAuthenticationToken(account.getUsername(), "0101010101"));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
             String jwt = socialDTO.getIdToken();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Account currentUser = accountService.findByUsername(socialDTO.getEmail());

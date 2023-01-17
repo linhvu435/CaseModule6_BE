@@ -24,6 +24,8 @@ public class Product {
     private long amountsell;
     private String img;
 
+    private long star;
+
     @ManyToOne(cascade=CascadeType.MERGE)
     private Category category;
 
