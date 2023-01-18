@@ -58,11 +58,7 @@ public class VoucherAPI {
 
     @GetMapping("/deletevoucher/{idvoucher}")
     public ResponseEntity<?> deletevoucher(@PathVariable long idvoucher) {
-
-
-                iVoucherRepoM.deleteById(idvoucher);
-
-
+        iVoucherRepoM.deleteById(idvoucher);
         return new ResponseEntity<>("Xoa thanh cong", HttpStatus.OK);
     }
 

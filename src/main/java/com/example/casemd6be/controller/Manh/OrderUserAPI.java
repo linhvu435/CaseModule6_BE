@@ -50,7 +50,7 @@ public class OrderUserAPI {
         Account account = iAccountRepo.findByUsername(userDetails.getUsername());
         List<Bill> bills1 = iBillRepoM.findAllBbyIdAccount(account.getId());
         List<Bill> billList=new ArrayList<>();
-        //check bill của account có trạng thái khác 6
+        //check bill của account có trạng thái khác 7
         for (int i = 0; i < bills1.size(); i++) {
            if(bills1.get(i).getBillStatus().getId()!=7){
                billList.add(bills1.get(i));

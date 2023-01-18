@@ -97,7 +97,9 @@ public class ProductAPI {
                 count++;
             }
         }
-        startotalshop= startotalshop/count;
+        if (count!=0){
+            startotalshop= startotalshop/count;
+        }
         return new ResponseEntity<>(startotalshop, HttpStatus.OK);
     }
 

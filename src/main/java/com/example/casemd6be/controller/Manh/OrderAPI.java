@@ -3,6 +3,7 @@ package com.example.casemd6be.controller.Manh;
 import com.example.casemd6be.model.*;
 
 import com.example.casemd6be.model.dto.BillDTO;
+import com.example.casemd6be.model.dto.BillStatusDTO;
 import com.example.casemd6be.repository.manh.IBillRepoM;
 import com.example.casemd6be.repository.manh.IBillStatusM;
 import com.example.casemd6be.repository.manh.IProductRepoM;
@@ -91,15 +92,64 @@ public class OrderAPI {
     }
 
     @GetMapping("/getallbillstatus")
-    public ResponseEntity<List<BillStatus>> getallbillstatus() {
+    public ResponseEntity<?> getallbillstatus() {
         List<BillStatus> billStatuses =iBillStatusM.findAllBillStatus();
         for (int i = 0; i < billStatuses.size(); i++) {
             if (billStatuses.get(i).getId()==7){
                 billStatuses.remove(billStatuses.get(i));
             }
         }
-        return new ResponseEntity<>(billStatuses, HttpStatus.OK);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
+        List<Bill> bills1 = iBillRepoM.findAllB();
+        List<Bill> billList = new ArrayList<>();
+        for (int i = 0; i < bills1.size(); i++) {
+            for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()&&bills1.get(i).getBillStatus().getId()!=7){
+                    billList.add(bills1.get(i));
+                    break;
+                }
+            }
+        }
+        List<BillStatusDTO> billStatusDTO = new ArrayList<>();
+        long amount = 0 ;
+        for (int i = 0; i < billStatuses.size(); i++) {
+            for (int j = 0; j < billList.size(); j++) {
+                if (billList.get(j).getBillStatus().getId()==billStatuses.get(i).getId()){
+                    amount++;
+                }
+            }
+            billStatusDTO.add(new BillStatusDTO(billStatuses.get(i).getId(),billStatuses.get(i).getName(),amount));
+            amount = 0;
+        }
+        return new ResponseEntity<>(billStatusDTO, HttpStatus.OK);
     }
+
+    @GetMapping("/showbillstatusmybill")
+    public ResponseEntity<?> getallbillstatusmybill() {
+        List<BillStatus> billStatuses =iBillStatusM.findAllBillStatus();
+        for (int i = 0; i < billStatuses.size(); i++) {
+            if (billStatuses.get(i).getId()==7){
+                billStatuses.remove(billStatuses.get(i));
+            }
+        }
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = iAccountRepo.findByUsername(userDetails.getUsername());
+        List<Bill> billList = iBillRepoM.findAllBbyIdAccount(account.getId());
+        List<BillStatusDTO> billStatusDTO = new ArrayList<>();
+        long amount = 0 ;
+        for (int i = 0; i < billStatuses.size(); i++) {
+            for (int j = 0; j < billList.size(); j++) {
+                if (billList.get(j).getBillStatus().getId()==billStatuses.get(i).getId()){
+                    amount++;
+                }
+            }
+            billStatusDTO.add(new BillStatusDTO(billStatuses.get(i).getId(),billStatuses.get(i).getName(),amount));
+            amount = 0;
+        }
+        return new ResponseEntity<>(billStatusDTO, HttpStatus.OK);
+    }
+
 
     @GetMapping("/showBillShop")
     public ResponseEntity<?> showbillshop() {
@@ -109,7 +159,7 @@ public class OrderAPI {
         List<Bill> billList = new ArrayList<>();
         for (int i = 0; i < bills1.size(); i++) {
             for (int j = 0; j < bills1.get(i).getProduct().size(); j++) {
-                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()&&bills1.get(i).getBillStatus().getId()!=6){
+                if (bills1.get(i).getProduct().get(j).getShop().getAccount().getId()==account.getId()&&bills1.get(i).getBillStatus().getId()!=7){
                     billList.add(bills1.get(i));
                     break;
                 }
@@ -274,5 +324,7 @@ public class OrderAPI {
         iBillRepoM.save(bill);
         return new ResponseEntity<>(bill, HttpStatus.OK);
     }
+
+
 
 }
