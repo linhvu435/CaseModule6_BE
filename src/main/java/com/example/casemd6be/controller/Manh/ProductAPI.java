@@ -28,7 +28,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(path = "/showproduct")
+    @RequestMapping(path = "/showproduct")
 public class ProductAPI {
     @Autowired
     IProductRepoM iProductRepoM;
