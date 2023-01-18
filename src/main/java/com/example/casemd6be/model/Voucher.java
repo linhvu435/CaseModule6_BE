@@ -15,6 +15,8 @@ public class Voucher {
 
     private long amount;
 
+    private long status;
+
     @OneToOne
     private Shop shop;
 
